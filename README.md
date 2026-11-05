@@ -25,6 +25,14 @@ The standalone app needs no installation, account, build step, package manager, 
 
 Apple, Google, and many other sites prevent embedding inside another page. Choose **Browser companion** to open websites as top-level Chrome pages and display their viewport captures in DeviceScale Lab.
 
+### Why this update is needed
+
+The original URL preview uses an iframe. A website can refuse iframe embedding through its security headers, so changing the iframe settings cannot make every website load or support login. The companion opens the actual website in a separate Chrome window, where you can interact and sign in, then captures each device's logical viewport for comparison. Login data stays in a dedicated local Chrome profile.
+
+This update also adds a live calibration slider and a remembered Hide/Show ruler toggle, so you can adjust physical size against a real ruler and reclaim workspace space afterward.
+
+### First-time setup and launch
+
 1. Install **Node.js 22 or newer** and **Google Chrome**.
 2. Open Terminal in the extracted project folder and run:
 
@@ -37,6 +45,18 @@ Apple, Google, and many other sites prevent embedding inside another page. Choos
 4. Choose **URL → Browser companion**, enter the website address, and click **Preview website**.
 5. Use **Interact / sign in** beneath a device to select its Chrome tab. Enter credentials and use the website directly in that window.
 6. Return to DeviceScale Lab and choose **Refresh captures**. Use **Reload pages** when other device tabs need to pick up a changed login session. Optional **Auto-capture every 2 seconds** updates captures while the app is visible; it starts off.
+
+`npm ci` installs the exact helper dependencies recorded in `package-lock.json`. `npm start` starts the local server; leave that Terminal window running while using the companion. No build step is needed.
+
+### Run again later
+
+Open Terminal in the same project folder and run:
+
+```sh
+npm start
+```
+
+Open **http://127.0.0.1:8765**, choose **URL → Browser companion**, enter a URL, and click **Preview website**. Run `npm ci` again after downloading an update that changes the dependencies, or if `node_modules/` has been removed. Press **Ctrl+C** in Terminal when finished.
 
 The companion creates a tab for each device's logical viewport. It shares a dedicated login profile between those tabs and preserves that profile across restarts. Calibration, Fit All, and reordering preserve the tabs and their current URLs. Rotation resizes a tab; removing a device closes its tab. Preview website navigates all selected devices to the entered URL again. These are desktop Chrome pages at different viewport sizes, not native iOS browsers or touch-device emulation.
 
