@@ -32,6 +32,12 @@ An existing Safari sign-in is **not guaranteed** inside a preview. Safari blocks
 
 Sites such as Apple and Google may refuse embedding through `X-Frame-Options` or Content Security Policy. Existing cookies do not remove those restrictions. DeviceScale Lab reports **Preview requested**, because a cross-origin frame cannot reliably report successful rendering to the app. See [the browser's embedding rules](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Frame-Options).
 
+**Can DeviceScale Lab fix this?** No. A normal web app cannot override a website's `X-Frame-Options` or CSP `frame-ancestors` restrictions in Safari or Chrome. The website owner controls whether embedding is allowed.
+
+- **A website you control:** configure its response headers to permit the intended preview origin, checking both `X-Frame-Options` and CSP `frame-ancestors`.
+- **A website you do not control:** DeviceScale Lab cannot change its response headers. Interactive previews require the website to allow embedding.
+- **Cookies and login:** signing in or reusing existing cookies does not bypass embedding restrictions.
+
 For blocked websites, use **Image** mode with a screenshot to compare physical size, or **HTML** mode with a responsive mockup you control. Changing preview settings rebuilds embedded pages, so finish any form interaction before rotating or recalibrating. Login flows that require popups or top-level navigation may not work in the sandbox. Pasted/uploaded HTML keeps a separate, restricted origin.
 
 ### Moving back from the companion version
