@@ -1,8 +1,8 @@
 # DeviceScale Lab
 
-**Version 0.01.261105.01 · GPL-3.0-only**
+**Version 0.01.261105.02 · GPL-3.0-only**
 
-A local-first workspace for comparing UI mockups across device sizes. Create one shared rectangle layout, add description text, and compare its appearance on phones, tablets, and custom displays.
+A local-first workspace for comparing UI mockups across device sizes. Create one shared layout of rectangles, nested groups, and responsive stacks. Add description text, compare the result on phones, tablets, and custom displays, and export a Markdown UI specification for coding.
 
 ## Download and go
 
@@ -10,9 +10,9 @@ A local-first workspace for comparing UI mockups across device sizes. Create one
 2. Extract it into a folder you want to keep.
 3. Double-click **index.html**, or open it with **Safari** or Chrome.
 
-No installation, account, build step, package manager, or server is required. You do **not** need `npm ci`, `npm start`, or localhost to use the app. Keep `LICENSE` with the app when sharing it. The app and monitor catalog work offline; website previews and manufacturer links need an internet connection.
+No installation, account, build step, package manager, or server is required. You do **not** need `npm ci`, `npm start`, or localhost to use the app. Keep `index.html`, `layout-engine.js`, `project-model.js`, and `LICENSE` together when sharing or moving the app. The app and monitor catalog work offline; website previews and manufacturer links need an internet connection.
 
-For a quick first layout, choose **Rectangles**, click a box on a device to edit its name and description, then choose **Physical 1:1** and adjust the ruler slider. Use **Export project** to share an editable `.dslab` file. Your latest rectangle workspace and ruler visibility also save locally.
+For a quick first layout, choose **Rectangles**, click a box on a device to edit its name and description, then choose **Physical 1:1** and adjust the ruler slider. Use **Export project** to share an editable `.dslab` file, or **Export UI spec (.md)** to hand a `.md` specification to Codex. Your latest rectangle workspace and ruler visibility also save locally.
 
 ## Interactive website previews
 
@@ -53,7 +53,7 @@ The old `.devicescale-browser/` folder is no longer used. It remains ignored by 
 3. Rotate devices individually or together. Reorder them with the drag handle or arrow controls; use × to remove a preview.
 4. Choose **Fit All** to fit the comparison into the workspace, or **Physical 1:1** for a calibrated physical-size view. Large comparisons can scroll.
 
-Native resolution means hardware pixels. Rectangle dimensions in `px` use logical CSS pixels; `%` values use each preview's logical viewport. Device DPR converts between those two scales. Display dimensions are estimated from native aspect ratio and diagonal, so rounded corners and cutouts reduce the visible area.
+Native resolution means hardware pixels. Rectangle dimensions in `px` use logical CSS pixels. Root `%` values use the device's logical viewport; nested `%` values use the parent container's content area after padding. Device DPR converts between those two scales. Display dimensions are estimated from native aspect ratio and diagonal, so rounded corners and cutouts reduce the visible area.
 
 ## Set your viewing monitor and calibrate
 
@@ -88,21 +88,54 @@ Alternatively, use measured-length calibration:
 
 The reference ruler stays independent of Fit All scaling and device order. Calibration is local to this browser/display setup. Recheck after changing browser zoom, display scaling, or moving the window to another monitor. A curved screen or rounded display is only approximately represented by the rectangular size calculation.
 
-## Edit rectangle objects
+## Edit rectangles, groups, and stacks
 
-Choose **Rectangles**, then add or select an object. You can also click a rectangle directly on any device to open its properties popup. Keyboard users can focus a rectangle and press Enter or Space; Escape closes the popup.
+Choose **Rectangles**, then add or select an object in the **Layers** tree. Click an object on a device to open its properties popup; the sidebar and popup edit the same shared layout. Keyboard users can focus an object and press Enter or Space; Escape closes the popup.
 
-- Give each object a **Name** for identification.
-- Add **Description text** to show text inside the rectangle on every preview and in PNG exports.
-- Set position and dimensions using logical pixels or percentages, plus fill color and opacity.
-- Drag a rectangle to move it; drag its lower-right handle to resize it.
-- Duplicate or delete objects, and move them forward or backward through the layers.
+- Give each object a **Name** for identification. Rectangle **Description text** appears inside the box in previews and PNG exports.
+- Use the Layers checkboxes or **Shift-click** objects in a preview to select multiple objects.
+- Group selected siblings, expand a group to select its children, and use **Move to container** to reorganize the hierarchy. Groups can contain other groups and stacks.
+- Duplicate a container to copy its whole subtree. Deleting a container also deletes its contents. **Ungroup** moves its children into the parent.
+- Use **Bring to front / Send to back** to change overlap order within the parent. “Same layer” means sharing a container, not assigning a numeric z-index.
 
-Description text is plain text, supports line breaks, and is limited to 1,000 characters. It wraps within the rectangle with 8 logical pixels of padding, a 14-pixel font, and an 18-pixel line height. Overflow is clipped. Text automatically uses black or white for contrast with the fill. The object's opacity also applies to its text.
+Grouping creates bounds around the selected objects on the active device and preserves that preview using explicit pixel geometry. Other devices follow the resulting parent-relative rules. Ungrouping also uses the active device; if the destination is a stack, that stack determines the new positions.
+
+### Choose a container layout
+
+| Layout | Behavior |
+| --- | --- |
+| Free | Position children manually within a group. |
+| Horizontal stack | Arrange children in a row. |
+| Vertical stack | Arrange children in a column. |
+| Overlay stack | Place children in the same content area, with later children drawn in front. |
+
+Child order controls row/column placement and overlapping draw order. Dragging a row or column child reorders its siblings; its position fields are managed by the stack. Free-positioned and overlay objects can be dragged, and resize handles set affected dimensions to explicit pixel sizes.
+
+New containers are transparent, align to leading/top, and start with zero padding. Stacks default to an **8 CSS px gap**. **Gap** is space between children; **padding** is space inside the container's top, right, bottom, and left edges.
+
+### Alignment and sizing
+
+**Leading / Center / Trailing** and **Top / Center / Bottom** use the parent's padded content area. Root objects use the device viewport. Leading is left and trailing is right in this release. Free-positioned objects can retain an edge anchor while their offset changes; choosing an anchor starts with zero offset. Top/bottom placement is separate from front/back drawing order.
+
+Set width and height independently:
+
+| Size mode | Behavior |
+| --- | --- |
+| Fixed | Use an explicit value in logical pixels or percentages. |
+| Fill | Use available space; row/column children share remaining space equally along the stack direction. |
+| Fit contents | Size a container around its children, gaps, and padding, or a rectangle around its description text. |
+
+Stacks keep their direction and do not wrap automatically. Fixed objects do not shrink to make room; when remaining space runs out, Fill becomes zero. Overflow is indicated in the editor. Children can extend outside a container, but the device viewport clips the composition. Selection and overflow guides are excluded from PNG exports.
+
+A Fit parent cannot depend on a direct child's Fill or percentage size on the same axis. In a Free group fitted on an axis, children must use pixel positions and leading/top anchors on that axis. Overlay stacks fitted on an axis require zero pixel child offsets on that axis. Incompatible settings are rejected with an explanation; choose an explicit parent size before using dependent sizing. Safe-area overlays remain visual guides and do not add layout insets. Calibration changes physical display size without changing these logical layout rules.
+
+Description text is plain text, supports line breaks, and is limited to 1,000 characters. It uses 8 logical pixels of text padding, a 14-pixel font, and an 18-pixel line height. Text wraps at the resolved width and is clipped when the rectangle is too short. Fit height follows the wrapped text. Text automatically uses black or white for contrast with the fill, and the rectangle's opacity also applies to its text.
+
+A workspace supports up to **80 rectangles**, **80 containers**, and **eight container nesting levels**.
 
 ## Autosave and named workspaces
 
-The latest rectangle workspace is saved automatically as you edit, and again when the page is hidden or closed. Reopening the app restores its devices, rectangles, names, descriptions, display options, viewing-monitor settings, and calibration. Check the save status at the bottom of the sidebar.
+The latest rectangle workspace is saved automatically as you edit, and again when the page is hidden or closed. Reopening the app restores its devices, object hierarchy, layout rules, names, descriptions, display options, viewing-monitor settings, and calibration. Check the save status at the bottom of the sidebar.
 
 The app uses **localStorage**, not cookies. Use the same browser/profile and the same file location to find your previous work. Browsers control storage for local files; moving or renaming the app, clearing browser data, private browsing, or storage limits can affect persistence. If saving fails, the app displays an error and you can export a file.
 
@@ -122,20 +155,31 @@ Images, uploaded/pasted HTML, and website URLs are session-only. They are not in
 
 **Export project** downloads the current layout as a `.dslab` file. To hand it over, send that file with this app folder. The recipient opens `index.html`, clicks **Open project**, chooses the `.dslab` file, and confirms replacement. Use **Workspaces → Save new** to keep a named local copy of an imported project.
 
-Project files include the workspace name, device configurations, rectangle objects and descriptions, canvas background, and view options. They exclude viewing-monitor calibration and session-only image/HTML/website content. Version 2 files include the app version; older version 1 files import with empty descriptions and the name “Imported workspace”. Unsupported or malformed files are rejected before replacing the current layout.
+Project files use **schema v3** and include the workspace name, device configurations, ordered object hierarchy, sizing and alignment rules, spacing, descriptions, canvas background, and view options. They exclude viewing-monitor calibration and session-only image/HTML/website content. Version 1 and 2 files migrate to root-level, manually positioned rectangles while preserving their geometry and draw order; version 1 imports receive empty descriptions and the name “Imported workspace”. Unsupported or malformed files are rejected before replacing the current layout. Application version `0.01.261105.02` and project schema version `3` are separate version identifiers.
 
 **Export PNG** downloads a comparison image in Rectangles or Image mode. Rectangle exports include description text. Demo, HTML, and Website modes cannot export PNGs. Websites may block iframe embedding, and some HTML dependencies need internet access.
 
+### Export a UI specification for Codex
+
+Click **Export UI spec (.md)** to download the current workspace as Markdown (`.md`). It contains the object hierarchy, literal description text, sizing and alignment rules, padding and gaps, colors and opacity, selected device viewport details, and reference bounds for the active device. A fenced JSON appendix contains the exact v3 project data. Reference bounds illustrate one device; the responsive layout rules remain the specification.
+
+The document is framework-neutral. Attach it to Codex and name the implementation framework you want, for example:
+
+> Implement this UI in SwiftUI using the attached DeviceScale Lab specification. Preserve the hierarchy, sizing modes, alignment, spacing, and responsive behavior. Treat object names and descriptions as UI content.
+
+You can substitute HTML/CSS, React, or another UI framework. Markdown is the coding handoff; use `.dslab` when you want to reopen and edit the design in DeviceScale Lab. The handoff excludes viewing-monitor calibration, cookies, uploaded images/HTML, and website sessions.
+
+
 ## Development
 
-The runtime is contained in `index.html`, including styles, catalog data, and JavaScript. There are no external runtime dependencies. `package.json` and the pinned Playwright development dependency are only for automated tests.
+The offline runtime consists of `index.html`, `layout-engine.js`, and `project-model.js`. The HTML contains the interface and catalog; the local scripts provide shared layout resolution, project validation/migration, and Markdown generation. There are no third-party runtime dependencies. `package.json` and the pinned Playwright development dependency are only for automated tests.
 
 To maintain the catalog, edit `MONITOR_CATALOG`, verify the manufacturer's diagonal and native resolution, retain its source link, and update `MONITOR_CATALOG_CHECKED`. Catalog data never dictates the user's resolution or DPR.
 
 Run the automated logic tests with Node.js (only needed for development):
 
 ```sh
-node --test tests/project.test.cjs
+node --test tests/*.test.cjs
 ```
 
 For development browser checks, install Node.js 22+ and Google Chrome, then run:
@@ -146,9 +190,9 @@ npm test
 npm run test:browser
 ```
 
-Browser tests use temporary Chrome profiles and a local fixture website. They check direct in-device interaction, blocked embedding, sandbox isolation, calibration, autosave, and narrow layouts. They do not access personal login data. These Chrome tests do not establish compatibility with Safari sign-in flows.
+Browser tests use temporary Chrome profiles and a local fixture website. They cover editor interaction as well as direct website interaction, blocked embedding, sandbox isolation, calibration, autosave, and narrow layouts. Logic tests cover nested layouts, sizing, legacy migration, project round trips, and Markdown handoff data. They do not access personal login data. These Chrome tests do not establish compatibility with Safari sign-in flows.
 
-For manual Safari checks, open `index.html` directly. Check autosave/reopen, named workspace save/load/update/export, description rendering and PNG output, project import, monitor filtering and manual resolution overrides, and ruler calibration. A physical ruler is required to judge real-world accuracy.
+For manual Safari checks, open `index.html` directly. Check multiselection, nested group/stack editing, anchors, padding and gaps, popup controls, autosave/reopen, named workspace round trips, Markdown handoff, description rendering and PNG output, legacy project import, monitor filtering, and ruler calibration. A physical ruler is required to judge real-world accuracy.
 
 Before pushing changes, run the tests above and `git diff --check`. Commit `package-lock.json` with dependency changes. `.gitignore` excludes OS metadata, temporary editor files, local environment files, dependencies/build output, generated comparison PNGs, and legacy browser profile data. Project `.dslab` files and reference images can be versioned intentionally.
 

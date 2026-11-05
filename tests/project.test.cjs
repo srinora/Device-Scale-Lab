@@ -5,11 +5,13 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
+const DeviceScaleLayout = require('../layout-engine.js');
+const DeviceScaleProject = require('../project-model.js');
 
 const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 const script = html.match(/<script>([\s\S]*?)<\/script>/)[1].replace(/\ninit\(\);\s*$/, '\n');
 function app() {
-  const context = vm.createContext({window: {devicePixelRatio: 2}, URL});
+  const context = vm.createContext({window: {devicePixelRatio: 2}, URL, DeviceScaleLayout, DeviceScaleProject});
   vm.runInContext(script, context);
   return {
     run: code => vm.runInContext(code, context),
@@ -46,7 +48,7 @@ test('project round trip preserves names, IDs, mixed units, layers, custom devic
   assert.deepEqual(a.json('createProject(imported)'), a.json('project'));
   assert.notEqual(a.run('imported.devices[0].instance'), a.run('state.devices[0].instance'));
   assert.equal(a.run('imported.source'), 'rectangles');
-  assert.equal(a.run('imported.rectSelected'), a.run('project.rectangles[0].id'));
+  assert.equal(a.run('imported.rectSelected'), a.run('project.objects[0].id'));
 });
 
 test('handoff excludes source monitor calibration and private mockup content', () => {
@@ -67,18 +69,21 @@ test('handoff excludes source monitor calibration and private mockup content', (
 
 test('validation rejects malformed projects atomically', () => {
   const mutations = [
-    'p.version=99', 'p.format="other"', 'p.devices={}', 'p.rectangles=null',
-    'p.rectangles[1].id=p.rectangles[0].id', 'p.rectangles[0].id="<bad>"',
-    'p.rectangles[0].w=0', 'p.rectangles[0].h=-1', 'p.rectangles[0].x=Infinity',
-    'p.rectangles[0].y="10"', 'p.rectangles[0].opacity=101',
-    'p.rectangles[0].fill="red;background:url(x)"', 'p.rectangles[0].posUnit="mm"',
-    'p.rectangles[0].name="x".repeat(57)', 'p.devices[0].dpr=0',
+    'p.version=99', 'p.format="other"', 'p.devices={}', 'p.objects=null',
+    'p.objects[1].id=p.objects[0].id', 'p.objects[0].id="<bad>"',
+    'p.objects[0].w=0', 'p.objects[0].h=-1', 'p.objects[0].x=Infinity',
+    'p.objects[0].y="10"', 'p.objects[0].opacity=101',
+    'p.objects[0].fill="red;background:url(x)"', 'p.objects[0].posUnit="mm"',
+    'p.objects[0].name="x".repeat(57)', 'p.devices[0].dpr=0',
     'p.devices[0].diag=NaN', 'p.devices[0].orientation="upside-down"',
     'p.devices[0].family="unknown"', 'p.devices[0].safeTop=-1',
     'p.devices[0].cutout="bad"', 'p.rectBg="#abc"', 'p.view.safe="true"',
-    'p.rectangles[0].description="x".repeat(1001)', 'delete p.rectangles[0].description',
-    'p.rectangles[0].description={}', 'p.workspaceName=" "',
-    'p.workspaceName="x".repeat(65)', 'delete p.appVersion'
+    'p.objects[0].description="x".repeat(1001)', 'delete p.objects[0].description',
+    'p.objects[0].description={}', 'p.workspaceName=" "',
+    'p.workspaceName="x".repeat(65)', 'delete p.appVersion',
+    'p.objects[0].widthMode="stretch"', 'p.objects[0].heightMode="auto"',
+    'p.objects[0].anchorX="right"', 'p.objects[0].anchorY="middle"',
+    'p.objects[0].type="unknown"'
   ];
   const a = app(), before = a.json('state');
   for (const mutation of mutations) {
@@ -89,20 +94,20 @@ test('validation rejects malformed projects atomically', () => {
 
 test('empty projects and limits round-trip; excess objects or devices are rejected', () => {
   const a = app();
-  a.run('globalThis.p=createProject();p.devices=[];p.rectangles=[]');
+  a.run('globalThis.p=createProject();p.devices=[];p.objects=[]');
   assert.equal(a.run('projectWorkspace(p).rectSelected'), null);
-  a.run(`p=createProject();p.devices=Array.from({length:12},()=>({...p.devices[0]}));p.rectangles=Array.from({length:80},(_,i)=>({...p.rectangles[0],id:'r'+i}))`);
-  assert.equal(a.run('validateProject(p).rectangles.length'), 80);
+  a.run(`p=createProject();p.devices=Array.from({length:12},()=>({...p.devices[0]}));p.objects=Array.from({length:80},(_,i)=>({...p.objects[0],id:'r'+i}))`);
+  assert.equal(a.run('validateProject(p).objects.length'), 80);
   assert.throws(() => a.run('validateProject({...p,devices:[...p.devices,p.devices[0]]})'));
-  assert.throws(() => a.run('validateProject({...p,rectangles:[...p.rectangles,{...p.rectangles[0],id:"extra"}]})'));
+  assert.throws(() => a.run('validateProject({...p,objects:[...p.objects,{...p.objects[0],id:"extra"}]})'));
 });
 
 test('unknown fields are stripped while names remain plain data', () => {
   const a = app();
-  a.run(`globalThis.p=createProject();p.rectangles[0].name='<img src=x onerror=alert(1)>';p.rectangles[0].onclick='evil()';p.devices[0].instance='unsafe-instance';p.cssPpi=999`);
+  a.run(`globalThis.p=createProject();p.objects[0].name='<img src=x onerror=alert(1)>';p.objects[0].onclick='evil()';p.devices[0].instance='unsafe-instance';p.cssPpi=999`);
   const validated = a.json('validateProject(p)');
-  assert.equal(validated.rectangles[0].name, '<img src=x onerror=alert(1)>');
-  assert.equal('onclick' in validated.rectangles[0], false);
+  assert.equal(validated.objects[0].name, '<img src=x onerror=alert(1)>');
+  assert.equal('onclick' in validated.objects[0], false);
   assert.equal('instance' in validated.devices[0], false);
   assert.equal('cssPpi' in validated, false);
 });
@@ -114,17 +119,37 @@ test('legacy saved workspaces restore with calibration and without requiring new
   assert.equal(a.run('state.calibrated'), true);
   assert.equal(a.run('state.rectangles[0].name'), 'Existing name');
   assert.equal(a.run('state.rectangles[0].description'), '');
-  assert.equal(a.run('createProject().rectangles[0].sizeUnit'), 'px');
+  assert.equal(a.run('createProject().objects[0].sizeUnit'), 'px');
 });
 
-test('v1 handoffs migrate to v2 and remain editable and exportable', () => {
+test('v1 handoffs migrate to v3 and remain editable and exportable', () => {
   const a = app();
-  a.run(`globalThis.old=createProject();old.version=1;delete old.workspaceName;delete old.appVersion;old.rectangles.forEach(r=>delete r.description);globalThis.migrated=validateProject(old)`);
-  assert.equal(a.run('migrated.version'), 2);
+  a.run(`
+    globalThis.old=createProject();old.version=1;
+    old.rectangles=old.objects.map(({id,name,x,y,w,h,posUnit,sizeUnit,fill,opacity})=>({id,name,x,y,w,h,posUnit,sizeUnit,fill,opacity}));
+    delete old.objects;delete old.workspaceName;delete old.appVersion;
+    globalThis.migrated=validateProject(old);
+  `);
+  assert.equal(a.run('migrated.version'), 3);
   assert.equal(a.run('migrated.workspaceName'), 'Imported workspace');
-  assert.equal(a.run('migrated.appVersion'), '0.01.261105.01');
-  assert.ok(a.run('migrated.rectangles.every(r=>r.description==="")'));
+  assert.equal(a.run('migrated.appVersion'), '0.01.261105.02');
+  assert.ok(a.run('migrated.objects.every(r=>r.description===""&&r.type==="rectangle"&&r.widthMode==="fixed"&&r.heightMode==="fixed"&&r.anchorX==="free"&&r.anchorY==="free")'));
   assert.deepEqual(a.json('createProject(projectWorkspace(old))'), a.json('migrated'));
+});
+
+test('v2 handoffs retain names, descriptions, geometry and order while new exports use the current version', () => {
+  const a = app();
+  a.run(`
+    state.rectangles[0].description='Legacy description';state.rectangles[0].x=-12.5;state.rectangles.reverse();
+    globalThis.old=createProject();old.version=2;old.appVersion='0.01.261105.01';
+    old.rectangles=old.objects.map(({id,name,description,x,y,w,h,posUnit,sizeUnit,fill,opacity})=>({id,name,description,x,y,w,h,posUnit,sizeUnit,fill,opacity}));
+    delete old.objects;globalThis.migrated=validateProject(old);
+  `);
+  assert.equal(a.run('migrated.version'), 3);
+  assert.equal(a.run('migrated.workspaceName'), a.run('old.workspaceName'));
+  assert.deepEqual(a.json('migrated.objects.map(({id,name,description,x,y,w,h,posUnit,sizeUnit,fill,opacity})=>({id,name,description,x,y,w,h,posUnit,sizeUnit,fill,opacity}))'), a.json('old.rectangles'));
+  assert.deepEqual(a.json('migrated.objects.map(r=>rectGeometry(r,375,667))'), a.json('old.rectangles.map(r=>rectGeometry(r,375,667))'));
+  assert.equal(a.run('createProject(projectWorkspace(old)).appVersion'), '0.01.261105.02');
 });
 
 test('description layout handles line breaks, wrapping, clipping and Unicode without HTML interpretation', () => {
@@ -133,7 +158,7 @@ test('description layout handles line breaks, wrapping, clipping and Unicode wit
   assert.deepEqual(a.json(`layoutDescription('hello world',76,100,s=>s.length*10).map(l=>l.text)`), ['hello', 'world']);
   assert.deepEqual(a.json(`layoutDescription('a\\r\\nb\\nc',100,52,s=>s.length*10).map(l=>l.text)`), ['a', 'b']);
   assert.deepEqual(a.json(`layoutDescription('abcdefgh',46,100,s=>s.length*10).map(l=>l.text)`), ['abc', 'def', 'gh']);
-  assert.deepEqual(a.json(`layoutDescription('👨‍👩‍👧‍👦👨‍👩‍👧‍👦',26,100,s=>Array.from(descriptionGraphemes.segment(s)).length*10).map(l=>l.text)`), ['👨‍👩‍👧‍👦', '👨‍👩‍👧‍👦']);
+  assert.deepEqual(a.json(`layoutDescription('👨‍👩‍👧‍👦👨‍👩‍👧‍👦',26,100,s=>Array.from(new Intl.Segmenter(undefined,{granularity:'grapheme'}).segment(s)).length*10).map(l=>l.text)`), ['👨‍👩‍👧‍👦', '👨‍👩‍👧‍👦']);
   assert.deepEqual(a.json(`layoutDescription('<b>plain</b>',500,100,s=>s.length).map(l=>l.text)`), ['<b>plain</b>']);
   assert.deepEqual(a.json(`layoutDescription('hidden',16,100,s=>s.length)`), []);
   assert.deepEqual(a.json(`layoutDescription('hidden',100,16,s=>s.length)`), []);
@@ -154,8 +179,8 @@ test('named workspaces are independent snapshots with unique names and explicit 
   const a = withStorage();
   a.run(`globalThis.first=saveNamedWorkspace('  Review A  ',createProject());state.rectangles[0].description='Edited after saving';globalThis.second=saveNamedWorkspace('Review B',createProject())`);
   assert.equal(a.run('first.entry.project.workspaceName'), 'Review A');
-  assert.equal(a.run('readWorkspaceLibrary().entries[0].project.rectangles[0].description'), '');
-  assert.equal(a.run('readWorkspaceLibrary().entries[1].project.rectangles[0].description'), 'Edited after saving');
+  assert.equal(a.run('readWorkspaceLibrary().entries[0].project.objects[0].description'), '');
+  assert.equal(a.run('readWorkspaceLibrary().entries[1].project.objects[0].description'), 'Edited after saving');
   const before = a.run('localStorage.getItem(WORKSPACE_STORAGE_KEY)');
   assert.throws(() => a.run(`saveNamedWorkspace(' review a ',createProject())`), /already used/);
   assert.throws(() => a.run(`saveNamedWorkspace('Review A',createProject(),second.entry.id)`), /already used/);
@@ -163,7 +188,7 @@ test('named workspaces are independent snapshots with unique names and explicit 
   a.run(`globalThis.updated=saveNamedWorkspace('Review renamed',createProject(),first.entry.id)`);
   assert.equal(a.run('updated.entry.id'), a.run('first.entry.id'));
   assert.equal(a.run('readWorkspaceLibrary().entries.length'), 2);
-  assert.equal(a.run('readWorkspaceLibrary().entries[0].project.rectangles[0].description'), 'Edited after saving');
+  assert.equal(a.run('readWorkspaceLibrary().entries[0].project.objects[0].description'), 'Edited after saving');
   const working = a.json('state');
   a.run('deleteNamedWorkspace(first.entry.id)');
   assert.equal(a.run('readWorkspaceLibrary().entries.length'), 1);
@@ -240,13 +265,33 @@ test('autosave restores the latest named working copy and local monitor without 
     save();state=defaults();restore();
   `);
   assert.equal(a.run('state.rectangles[1].description'), 'Latest unsnapshotted edit');
-  assert.equal(a.run('readWorkspaceLibrary().entries[0].project.rectangles[1].description'), '');
+  assert.equal(a.run('readWorkspaceLibrary().entries[0].project.objects[1].description'), '');
   assert.equal(a.run('state.workspaceName'), 'First');
   assert.equal(a.run('state.savedWorkspaceId'), a.run('first.entry.id'));
   assert.equal(a.run('state.monitorModelId'), 'mba15-m4');
   assert.equal(a.run('state.monitorSize'), '15');
   assert.equal(a.run('state.cssPpi'), 119.5);
   assert.equal(a.run('state.calibrated'), true);
+});
+
+test('nested layout rules survive autosave and named workspaces, including selected descendants', () => {
+  const a = withStorage();
+  a.run(`
+    globalThis.document={getElementById:()=>({textContent:'',classList:{remove(){},add(){}}})};
+    globalThis.leaf={...state.rectangles[0],id:'nested-leaf',description:'Nested label',x:0,y:0,w:150,h:40,posUnit:'px',sizeUnit:'px',widthMode:'fixed',heightMode:'fixed',anchorX:'free',anchorY:'free'};
+    globalThis.inner={id:'inner',type:'container',name:'Row',x:0,y:0,w:100,h:100,posUnit:'px',sizeUnit:'px',widthMode:'fill',heightMode:'fit',anchorX:'free',anchorY:'free',layout:'horizontal',gap:12,padding:{top:4,right:5,bottom:6,left:7},alignX:'center',alignY:'center',children:[leaf]};
+    state.rectangles=[{id:'outer',type:'container',name:'Page',x:10,y:20,w:80,h:100,posUnit:'px',sizeUnit:'%',widthMode:'fixed',heightMode:'fit',anchorX:'trailing',anchorY:'bottom',layout:'vertical',gap:16,padding:{top:8,right:12,bottom:8,left:12},alignX:'leading',alignY:'top',children:[inner]}];
+    state.rectSelected='nested-leaf';state.source='rectangles';
+    globalThis.snapshot=createProject();globalThis.savedCopy=saveNamedWorkspace('Nested',snapshot);
+    save();state=defaults();restore();
+  `);
+  assert.deepEqual(a.json('createProject()'), a.json('snapshot'));
+  assert.equal(a.run('currentRect().id'), 'nested-leaf');
+  assert.equal(a.run('currentRect().description'), 'Nested label');
+  assert.deepEqual(a.json('readWorkspaceLibrary().entries[0].project.objects'), a.json('snapshot.objects'));
+  a.run(`currentRect().description='Changed';save()`);
+  assert.equal(a.run('readWorkspaceLibrary().entries[0].project.objects[0].children[0].children[0].description'), 'Nested label');
+  assert.equal(a.run('projectWorkspace(savedCopy.entry.project).rectangles[0].children[0].children[0].description'), 'Nested label');
 });
 
 test('leaving captures uncommitted monitor numbers, ignores incomplete values, and preserves unchanged calibration', () => {
