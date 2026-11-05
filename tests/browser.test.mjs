@@ -3,17 +3,27 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import http from 'node:http';
-import { mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { chromium } from 'playwright';
-import { BrowserCompanion } from '../companion/browser.mjs';
-import { createCompanionServer } from '../companion/server.mjs';
 
 const listen = server => new Promise(resolve => server.listen(0, '127.0.0.1', () => resolve('http://127.0.0.1:' + server.address().port)));
 const close = server => { server.closeAllConnections(); return new Promise(resolve => server.close(resolve)); };
-async function idle(page) { await page.waitForFunction(() => !companion.busy && !companion.force && companion.lastKey === companionKey(), null, { timeout: 60000 }); }
+// Cross-origin frame locator coordinates omit the parent's CSS transform in
+// Chrome. Map a real mouse click from logical viewport to displayed pixels.
+async function clickInPreview(page, index, target) {
+  const iframe = page.locator('.device-screen iframe').nth(index);
+  await iframe.scrollIntoViewIfNeeded();await target.waitFor({ state: 'visible' });
+  const point = await target.evaluate(element => {
+    element.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    const rect = element.getBoundingClientRect();
+    return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+  });
+  const viewport = await iframe.evaluate(element => ({ width: element.clientWidth, height: element.clientHeight }));
+  const box = await iframe.boundingBox();
+  await page.mouse.click(box.x + point.x * box.width / viewport.width, box.y + point.y * box.height / viewport.height);
+}
 
 test('standalone calibration: live scale, finish/exit autosave, hide/show, dialog cancel and narrow layout', { timeout: 45000 }, async () => {
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
@@ -54,83 +64,69 @@ test('standalone calibration: live scale, finish/exit autosave, hide/show, dialo
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth);
     assert.equal(overflow, false);
     await page.screenshot({ path: path.join(os.tmpdir(), 'devicescale-slider-mobile.png') });
-    await page.click('[data-source="url"]');await page.selectOption('#urlEngine', 'companion');await page.click('#connectCompanion');
-    assert.match(await page.locator('#companionStatus').textContent(), /npm start/);
     assert.deepEqual(errors, []);
   } finally { await browser.close(); }
 });
 
-test('companion captures blocked-frame pages, shares login, keeps tabs through calibration/reorder, resizes, recovers and restarts', { timeout: 120000 }, async () => {
-  const profileDir = await mkdtemp(path.join(os.tmpdir(), 'dslab-browser-test-'));
+test('standalone URL previews support direct interaction, preserve frame isolation and respect blocked embedding', { timeout: 45000 }, async () => {
   const fixture = http.createServer((req, res) => {
-    if (req.url === '/login') {
-      res.writeHead(302, { 'Set-Cookie': 'dslab_test_login=yes; Path=/; Max-Age=3600; SameSite=Lax; HttpOnly', Location: '/account' });res.end();return;
-    }
-    if (req.url === '/missing') { res.writeHead(404);res.end('Test missing page');return; }
-    res.writeHead(200, { 'Content-Type': 'text/html', 'X-Frame-Options': 'DENY' });
-    const signedIn = (req.headers.cookie || '').includes('dslab_test_login=yes');
-    res.end('<!doctype html><html><head><title>Local browser test</title></head><body style="font:24px system-ui;background:#dcecf8"><h1>' + (signedIn ? 'Signed in' : 'Please sign in') + '</h1><form method="post" action="/login"><button>Sign in for test</button></form><p>Viewport <span id="size"></span></p><script>size.textContent=innerWidth+" × "+innerHeight</script></body></html>');
+    const url = new URL(req.url, 'http://localhost');
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', ...(url.pathname === '/blocked' ? { 'X-Frame-Options': 'DENY' } : {}) });
+    if (url.pathname === '/submitted') { res.end('<h1>Form submitted</h1><p id="result">' + (url.searchParams.get('name') === 'Device tester' ? 'Device tester' : 'Unknown') + '</p>');return; }
+    res.end(`<!doctype html><html><head><title>Embedded test</title></head><body style="font:20px system-ui;padding:48px 16px;background:#dcecf8">
+      <h1>Interactive preview</h1><button id="count" onclick="this.textContent=String(Number(this.textContent)+1)">0</button>
+      <form action="/submitted"><label>Name <input name="name"></label><button>Submit</button></form>
+      <a href="#bottom">Scroll down</a><p style="margin-top:1200px" id="bottom">Bottom of preview</p>
+      </body></html>`);
   });
   const website = await listen(fixture);
-  const manager = new BrowserCompanion({ profileDir, headless: true, navigationTimeout: 3000 });
-  const { server } = createCompanionServer({ manager });
-  const origin = await listen(server);
-  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  let browser;
   try {
-    const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
-    const errors = [];page.on('pageerror', e => errors.push(e.message));
-    await page.goto(origin);await page.waitForFunction(() => companion.token && !companion.busy);
-    await page.click('[data-source="url"]');await page.selectOption('#urlEngine', 'companion');
-    await page.locator('#urlText').fill(website);await page.click('#applyUrlBtn');await idle(page);
-    assert.equal(manager.pages.size, 3);
-    assert.equal(await page.locator('[data-browser-image]:visible').count(), 3);
-    const entries = [...manager.pages.values()];
-    assert.deepEqual(entries[0].page.viewportSize(), { width: 375, height: 667 });
-    assert.equal(await entries[0].page.locator('h1').textContent(), 'Please sign in');
-    await page.locator('[data-browser-focus]').first().click();await page.waitForFunction(() => !companion.busy);
-    await entries[0].page.getByRole('button', { name: 'Sign in for test' }).click();
-    await page.click('#reloadBrowserPages');await page.waitForFunction(() => !companion.busy);
-    for (const entry of entries) assert.equal(await entry.page.locator('h1').textContent(), 'Signed in');
-    const oldURLs = entries.map(e => e.page.url());
-    await page.locator('#livePpi').fill('110');await page.locator('#livePpi').press('Tab');await page.click('#physicalMode');
-    await page.locator('[data-act="right"]').first().click();
-    await idle(page);
-    for (const entry of entries) assert.equal(manager.pages.get(entry.id).page, entry.page);
-    assert.deepEqual(entries.map(e => e.page.url()), oldURLs);
-    await page.evaluate(id => document.querySelector('[data-act="rotate"][data-instance="' + id + '"]').click(), entries[0].id);
-    await idle(page);assert.deepEqual(entries[0].page.viewportSize(), { width: 667, height: 375 });
-    assert.equal(entries[0].page.url(), oldURLs[0]);
-    const data = await page.evaluate(() => [...companion.images.values()][0].image);
-    assert.equal(Buffer.from(data.split(',')[1], 'base64').subarray(1, 4).toString(), 'PNG');
-    await page.click('#fitMode');await page.screenshot({ path: path.join(os.tmpdir(), 'devicescale-companion.png') });
-    const firstCapture = await page.evaluate(() => [...companion.images.values()][0].capturedAt);
-    await page.check('#autoCapture');
-    await page.waitForFunction(previous => [...companion.images.values()][0]?.capturedAt !== previous && !companion.busy, firstCapture);
-    await page.uncheck('#autoCapture');
-    await page.evaluate(id => document.querySelector('[data-act="remove"][data-instance="' + id + '"]').click(), entries[0].id);
-    await idle(page);assert.equal(entries[0].page.isClosed(), true);assert.equal(manager.pages.size, 2);
-    await page.locator('#urlText').fill(website + '/missing');await page.click('#applyUrlBtn');await idle(page);
-    assert.match(await page.locator('.browser-caption').first().textContent(), /HTTP 404/);
-    // Restarts reuse the dedicated profile's persistent cookies.
-    await page.click('#stopBrowser');await page.waitForFunction(() => !companion.busy);
-    assert.equal(manager.context, null);
-    await page.locator('#urlText').fill(website);await page.click('#applyUrlBtn');await idle(page);
-    for (const entry of manager.pages.values()) assert.equal(await entry.page.locator('h1').textContent(), 'Signed in');
-    // Explicit Preview can recover a tab manually closed by the user.
-    await [...manager.pages.values()][0].page.close();
-    await page.click('#refreshCaptures');await page.waitForFunction(() => !companion.busy);
-    assert.match(await page.locator('#companionStatus').textContent(), /attention/);
-    await page.click('#applyUrlBtn');await idle(page);
-    assert.ok([...manager.pages.values()].every(e => !e.page.isClosed()));
-    // Simulate helper loss and verify an honest, recoverable state in the app.
-    await page.route('**/api/captures', route => route.abort());
-    await page.click('#refreshCaptures');await page.waitForFunction(() => !companion.busy);
-    assert.match(await page.locator('#companionStatus').textContent(), /disconnected/);
-    await page.unroute('**/api/captures');await page.click('#connectCompanion');await page.waitForFunction(() => !!companion.token && !companion.busy);
-    await page.click('#applyUrlBtn');await idle(page);
+    browser = await chromium.launch({ channel: 'chrome', headless: true });
+    const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+    const page = await context.newPage();
+    const errors = [], requests = [];page.on('pageerror', e => errors.push(e.message));page.on('request', req => requests.push(req.url()));
+    await page.goto(pathToFileURL(path.resolve('index.html')).href);
+    await page.click('[data-source="url"]');await page.locator('#urlText').fill(website);await page.click('#applyUrlBtn');
+    // Let the initial stage ResizeObserver debounce settle before interacting.
+    await page.waitForTimeout(250);
+    const frames = page.locator('.device-screen iframe');
+    assert.equal(await frames.count(), 3);
+    const first = page.frameLocator('.device-screen iframe').nth(0), second = page.frameLocator('.device-screen iframe').nth(1);
+    await clickInPreview(page, 0, first.locator('#count'));
+    assert.equal(await first.locator('#count').textContent(), '1');
+    assert.equal(await second.locator('#count').textContent(), '0');
+    assert.equal(await frames.first().evaluate(e => e.style.width), '375px');
+    assert.match(await frames.first().getAttribute('sandbox'), /allow-same-origin/);
+    await clickInPreview(page, 0, first.getByLabel('Name'));await page.keyboard.type('Device tester');
+    await clickInPreview(page, 0, first.getByRole('button', { name: 'Submit' }));
+    await first.getByRole('heading', { name: 'Form submitted' }).waitFor();
+    assert.equal(await first.locator('#result').textContent(), 'Device tester');
+    await clickInPreview(page, 1, second.getByRole('link', { name: 'Scroll down' }));
+    assert.ok(await second.locator('body').evaluate(e => e.ownerDocument.defaultView.scrollY) > 0);
+    assert.equal(context.pages().length, 1);
+    assert.equal(await page.locator('#urlEngine').count(), 0);
+    assert.equal(requests.some(url => url.includes('/api/') || url.startsWith('http://127.0.0.1:8765')), false);
+
+    const before = await page.evaluate(() => state.url);
+    for (const url of ['javascript:alert(1)', 'https://user:password@example.com']) {
+      await page.locator('#urlText').fill(url);await page.click('#applyUrlBtn');
+      assert.equal(await page.evaluate(() => state.url), before);
+      assert.match(await page.locator('#toast').textContent(), /without credentials/);
+    }
+    await page.locator('#urlText').fill(website + '/blocked');
+    const blocked = page.waitForResponse(website + '/blocked');await page.click('#applyUrlBtn');await blocked;
+    assert.match(await page.locator('#toast').textContent(), /Preview requested/);
+    assert.match(await page.locator('#urlPanel').textContent(), /may block embedding/);
+    assert.equal(await first.locator('#count').count(), 0);
+
+    await page.click('[data-source="html"]');
+    await page.locator('#htmlText').fill('<!doctype html><p id="result">Waiting</p><script>try { parent.localStorage.getItem("devicescale-lab-v1"); result.textContent="exposed"; } catch { result.textContent="isolated"; }</script>');
+    await page.click('#applyHtmlBtn');
+    await first.getByText('isolated', { exact: true }).waitFor();
+    assert.equal(await frames.first().getAttribute('sandbox'), 'allow-scripts allow-forms');
     assert.deepEqual(errors, []);
   } finally {
-    await browser.close();await manager.queue;await manager.stop();
-    await close(server);await close(fixture);await rm(profileDir, { recursive: true, force: true });
+    if (browser) await browser.close();await close(fixture);
   }
 });

@@ -20,6 +20,7 @@
 !.env.sample
 !.env.template
 /.aws/
+# Retained to protect local login data left by older companion versions.
 /.devicescale-browser/
 
 # Local logs and caches

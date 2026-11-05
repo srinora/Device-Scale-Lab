@@ -4,69 +4,41 @@
 
 A local-first workspace for comparing UI mockups across device sizes. Create one shared rectangle layout, add description text, and compare its appearance on phones, tablets, and custom displays.
 
-## Choose how to run
-
-| What you want to do | Start here |
-| --- | --- |
-| Design rectangles, compare images or HTML, calibrate physical size, save and share layouts | Open `index.html` directly; no installation needed. |
-| Preview websites that block embedding, or sign in to a website | Run the optional browser companion, then open `http://127.0.0.1:8765`. |
-
-For a quick first layout, choose **Rectangles**, click a box on a device to edit its name and description, then choose **Physical 1:1** and adjust the ruler slider. Use **Export project** to share an editable `.dslab` file. Your latest rectangle workspace and ruler visibility also save locally.
-
 ## Download and go
 
 1. Download this project as a ZIP (on GitHub: **Code → Download ZIP**).
-2. Extract the ZIP into a folder you want to keep.
-3. Double-click **index.html**, or open it with Safari or Chrome.
+2. Extract it into a folder you want to keep.
+3. Double-click **index.html**, or open it with **Safari** or Chrome.
 
-The standalone app needs no installation, account, build step, package manager, or server. Keep `LICENSE` with the app when sharing it. The app and monitor catalog work offline; website previews and manufacturer links need an internet connection. The optional browser companion below requires Node.js and Chrome.
+No installation, account, build step, package manager, or server is required. You do **not** need `npm ci`, `npm start`, or localhost to use the app. Keep `LICENSE` with the app when sharing it. The app and monitor catalog work offline; website previews and manufacturer links need an internet connection.
 
-## Live websites and login: optional browser companion
+For a quick first layout, choose **Rectangles**, click a box on a device to edit its name and description, then choose **Physical 1:1** and adjust the ruler slider. Use **Export project** to share an editable `.dslab` file. Your latest rectangle workspace and ruler visibility also save locally.
 
-Apple, Google, and many other sites prevent embedding inside another page. Choose **Browser companion** to open websites as top-level Chrome pages and display their viewport captures in DeviceScale Lab.
+## Interactive website previews
 
-### Why this update is needed
+1. Choose **URL** under **02 / Mockup content**.
+2. Enter an HTTP or HTTPS website address and click **Preview website**.
+3. Click, type, submit forms, and scroll **directly inside each device preview**, where the website supports embedding. Each device has its own page view.
 
-The original URL preview uses an iframe. A website can refuse iframe embedding through its security headers, so changing the iframe settings cannot make every website load or support login. The companion opens the actual website in a separate Chrome window, where you can interact and sign in, then captures each device's logical viewport for comparison. Login data stays in a dedicated local Chrome profile.
+This restores the original inline preview workflow. There is no separate Chrome session, capture refresh step, or browser companion to run. The live calibration slider, Hide/Show ruler toggle, rectangle descriptions, autosave, and `.dslab` sharing remain available.
 
-This update also adds a live calibration slider and a remembered Hide/Show ruler toggle, so you can adjust physical size against a real ruler and reclaim workspace space afterward.
+### Safari cookies and sign-in
 
-### First-time setup and launch
+The previews run in the browser where you opened the app. External websites keep their own origin and can request storage access through the browser. DeviceScale Lab does not read, copy, or import your Safari cookies.
 
-1. Install **Node.js 22 or newer** and **Google Chrome**.
-2. Open Terminal in the extracted project folder and run:
+An existing Safari sign-in is **not guaranteed** inside a preview. Safari blocks third-party cookies by default; a website may need to implement the Storage Access API and ask you for access. Cookie attributes and the site's authentication flow can also prevent embedded sign-in. See [WebKit's explanation of third-party cookies and authenticated embeds](https://webkit.org/blog/10218/full-third-party-cookie-blocking-and-more/).
 
-   ```sh
-   npm ci
-   npm start
-   ```
+### When a website cannot load
 
-3. Open **http://127.0.0.1:8765** in Safari or Chrome. Keep Terminal running. If port 8765 is occupied, stop the other server before starting the companion.
-4. Choose **URL → Browser companion**, enter the website address, and click **Preview website**.
-5. Use **Interact / sign in** beneath a device to select its Chrome tab. Enter credentials and use the website directly in that window.
-6. Return to DeviceScale Lab and choose **Refresh captures**. Use **Reload pages** when other device tabs need to pick up a changed login session. Optional **Auto-capture every 2 seconds** updates captures while the app is visible; it starts off.
+Sites such as Apple and Google may refuse embedding through `X-Frame-Options` or Content Security Policy. Existing cookies do not remove those restrictions. DeviceScale Lab reports **Preview requested**, because a cross-origin frame cannot reliably report successful rendering to the app. See [the browser's embedding rules](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Frame-Options).
 
-`npm ci` installs the exact helper dependencies recorded in `package-lock.json`. `npm start` starts the local server; leave that Terminal window running while using the companion. No build step is needed.
+For blocked websites, use **Image** mode with a screenshot to compare physical size, or **HTML** mode with a responsive mockup you control. Changing preview settings rebuilds embedded pages, so finish any form interaction before rotating or recalibrating. Login flows that require popups or top-level navigation may not work in the sandbox. Pasted/uploaded HTML keeps a separate, restricted origin.
 
-### Run again later
+### Moving back from the companion version
 
-Open Terminal in the same project folder and run:
+File pages and localhost have separate workspace storage. If the previous helper is still running, first export any layout you need from the old localhost page, then press **Ctrl+C** in its Terminal window. Open `index.html` directly in Safari and use **Open project** to import the exported layout. Named workspaces already saved in Safari at the same file location remain there.
 
-```sh
-npm start
-```
-
-Open **http://127.0.0.1:8765**, choose **URL → Browser companion**, enter a URL, and click **Preview website**. Run `npm ci` again after downloading an update that changes the dependencies, or if `node_modules/` has been removed. Press **Ctrl+C** in Terminal when finished.
-
-The companion creates a tab for each device's logical viewport. It shares a dedicated login profile between those tabs and preserves that profile across restarts. Calibration, Fit All, and reordering preserve the tabs and their current URLs. Rotation resizes a tab; removing a device closes its tab. Preview website navigates all selected devices to the entered URL again. These are desktop Chrome pages at different viewport sizes, not native iOS browsers or touch-device emulation.
-
-Captures are images; interact in Chrome using the per-device button. Some authentication providers may still reject automation-controlled browsers or require additional verification. The companion does not bypass those checks. It supports up to 12 devices, 8192 CSS pixels per side, 16 megapixels per viewport, and 48 megapixels combined. Reduce custom logical resolutions if these limits are exceeded.
-
-**Stop browser** closes the companion's Chrome session while keeping its login profile. Ctrl+C in Terminal also stops the helper and its browser. Profile data lives in `.devicescale-browser/`, is excluded from Git, and is never included in `.dslab` exports. Captures stay in memory. To remove login data, stop the companion and delete that profile folder. Keep it out of shared ZIPs.
-
-The helper listens only on `127.0.0.1`; API requests require the local app origin and a session token. The standalone `file://` app cannot connect directly. File and localhost pages have separate browser storage: **Export project** from your existing file-based workspace, then **Open project** in the companion app. Recalibrate in that view. Existing named copies remain in the original browser storage.
-
-**Embedded preview** stays available for sites that allow framing. Its status reports a preview request, because it cannot reliably verify that a cross-origin website rendered successfully. If the helper stops, captures are marked disconnected; restart it and click **Connect**, then **Preview website**.
+The old `.devicescale-browser/` folder is no longer used. It remains ignored by Git because it may contain login data from the previous version; do not include it in shared ZIPs.
 
 ## Compare devices
 
@@ -99,7 +71,7 @@ Sources are linked on every catalog entry in the app. Apple model coverage follo
 
 For live calibration, use the **Smaller ↔ Larger** slider below the previews. Adjust until the 0–10 cm line measures **100 mm** with a physical ruler. Physical 1:1 previews update immediately. The −/+ buttons change density by 0.25 CSS px/in, and the numeric field allows precise entry. Your adjustment saves when you finish, and again when leaving the page. **Hide ruler / Show ruler** collapses or restores the whole panel and remembers your preference without resetting calibration.
 
-The slider normally covers 25–400 CSS px/in and expands for existing values outside that range. Numeric calibration supports 1–5000 CSS px/in. Slider changes preserve logical browser viewport sizes and website sessions.
+The slider normally covers 25–400 CSS px/in and expands for existing values outside that range. Numeric calibration supports 1–5000 CSS px/in. Slider changes preserve logical viewport sizes; embedded pages may reload when the previews redraw.
 
 Alternatively, use measured-length calibration:
 
@@ -150,7 +122,7 @@ Project files include the workspace name, device configurations, rectangle objec
 
 ## Development
 
-The standalone runtime is contained in `index.html`, including styles, catalog data, and JavaScript, and has no external runtime libraries. The optional Node helper is in `companion/`, with a pinned Playwright dependency and lockfile. It uses a separate persistent Chrome context and captures viewport images through [Playwright](https://playwright.dev/docs/screenshots).
+The runtime is contained in `index.html`, including styles, catalog data, and JavaScript. There are no external runtime dependencies. `package.json` and the pinned Playwright development dependency are only for automated tests.
 
 To maintain the catalog, edit `MONITOR_CATALOG`, verify the manufacturer's diagonal and native resolution, retain its source link, and update `MONITOR_CATALOG_CHECKED`. Catalog data never dictates the user's resolution or DPR.
 
@@ -160,22 +132,19 @@ Run the automated logic tests with Node.js (only needed for development):
 node --test tests/project.test.cjs
 ```
 
-After `npm ci`, run the helper/API tests and isolated Chrome integration tests:
+For development browser checks, install Node.js 22+ and Google Chrome, then run:
 
 ```sh
+npm ci
 npm test
 npm run test:browser
 ```
 
-Browser tests use temporary Chrome profiles and a local test login website; no personal credentials are required. They cover captures, session persistence, calibration, tab reuse, rotation/removal, disconnect recovery, and narrow layouts. API tests cover origin/token checks, navigation validation, and private-file isolation.
+Browser tests use temporary Chrome profiles and a local fixture website. They check direct in-device interaction, blocked embedding, sandbox isolation, calibration, autosave, and narrow layouts. They do not access personal login data. These Chrome tests do not establish compatibility with Safari sign-in flows.
 
-The current implementation passed 19 logic/API tests and 2 Chrome integration tests. Apple and Google homepages were also checked in the companion, along with helper startup, occupied-port reporting, and shutdown. These checks do not guarantee that a particular site's sign-in flow accepts automated Chrome. Safari has not been verified for this update.
+For manual Safari checks, open `index.html` directly. Check autosave/reopen, named workspace save/load/update/export, description rendering and PNG output, project import, monitor filtering and manual resolution overrides, and ruler calibration. A physical ruler is required to judge real-world accuracy.
 
-Before pushing changes, run the tests above and `git diff --check`. Commit `package-lock.json` with dependency changes. Keep `node_modules/` and `.devicescale-browser/` out of commits and shared folders; the latter contains the companion's local login data.
-
-For browser checks, open `index.html` directly. Check autosave/reopen, named workspace save/load/update/export, description rendering and PNG output, project import, monitor filtering and manual resolution overrides, and ruler calibration. A physical ruler is required to judge real-world accuracy.
-
-`.gitignore` excludes OS metadata, temporary editor files, local environment files, the companion's private browser profile, dependencies/build output, and generated comparison PNGs. Project `.dslab` files and reference images can be versioned intentionally.
+Before pushing changes, run the tests above and `git diff --check`. Commit `package-lock.json` with dependency changes. `.gitignore` excludes OS metadata, temporary editor files, local environment files, dependencies/build output, generated comparison PNGs, and legacy browser profile data. Project `.dslab` files and reference images can be versioned intentionally.
 
 ## License
 

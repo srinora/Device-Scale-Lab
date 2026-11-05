@@ -9,7 +9,7 @@ const vm = require('node:vm');
 const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 const script = html.match(/<script>([\s\S]*?)<\/script>/)[1].replace(/\ninit\(\);\s*$/, '\n');
 function app() {
-  const context = vm.createContext({window: {devicePixelRatio: 2}});
+  const context = vm.createContext({window: {devicePixelRatio: 2}, URL});
   vm.runInContext(script, context);
   return {
     run: code => vm.runInContext(code, context),
@@ -267,19 +267,28 @@ test('leaving captures uncommitted monitor numbers, ignores incomplete values, a
   assert.equal(a.run('state.calibrated'), false);
 });
 
-test('live calibration changes physical scale without changing browser viewports or physical dimensions', () => {
+test('live calibration changes physical scale without changing logical viewports or physical dimensions', () => {
   const a = app();
   a.run('queueRender=()=>{};state.cssPpi=96;state.calibrated=true');
   const dimensions = a.json('state.devices.map(dimensions)');
-  const specs = a.json(`browserPageSpecs(state.devices,'https://example.com/')`);
   const before = a.run('millimetersToCss(100)');
   assert.equal(a.run('setLiveCalibration(120)'), true);
   assert.ok(Math.abs(a.run('millimetersToCss(100)') / before - 1.25) < 1e-9);
   assert.deepEqual(a.json('state.devices.map(dimensions)'), dimensions);
-  assert.deepEqual(a.json(`browserPageSpecs(state.devices,'https://example.com/')`), specs);
   assert.deepEqual(a.json('calibrationSliderBounds(120)'), { min: 25, max: 400 });
   assert.deepEqual(a.json('calibrationSliderBounds(1)'), { min: 1, max: 400 });
   assert.deepEqual(a.json('calibrationSliderBounds(4500)'), { min: 25, max: 4500 });
   for (const input of ['', 'NaN', '0', '5001']) assert.equal(a.run(`setLiveCalibration(${JSON.stringify(input)})`), false);
   assert.equal(a.run('state.cssPpi'), 120);
+});
+
+
+test('external website previews retain their origin without relaxing same-origin or non-web frames', () => {
+  const a = app();
+  const external = a.run("websiteSandbox('https://example.com/','null')");
+  assert.match(external, /allow-same-origin/);
+  assert.match(external, /allow-storage-access-by-user-activation/);
+  for (const url of ['https://app.example/test', 'about:blank', 'javascript:alert(1)', 'invalid']) {
+    assert.equal(a.run(`websiteSandbox(${JSON.stringify(url)},'https://app.example')`), 'allow-scripts allow-forms');
+  }
 });
