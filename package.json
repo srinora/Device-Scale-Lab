@@ -1,0 +1,14 @@
+{
+  "name": "devicescale-lab",
+  "appVersion": "0.01.261105.01",
+  "private": true,
+  "description": "Optional local browser companion for DeviceScale Lab 0.01.261105.01",
+  "license": "GPL-3.0-only",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node companion/server.mjs",
+    "test": "node --test tests/project.test.cjs tests/companion.test.mjs",
+    "test:browser": "node --test tests/browser.test.mjs"
+  },
+  "dependencies": { "playwright": "1.64.1" }
+}

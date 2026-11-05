@@ -266,3 +266,20 @@ test('leaving captures uncommitted monitor numbers, ignores incomplete values, a
   assert.equal(a.run('state.monitorDpr'), 2);
   assert.equal(a.run('state.calibrated'), false);
 });
+
+test('live calibration changes physical scale without changing browser viewports or physical dimensions', () => {
+  const a = app();
+  a.run('queueRender=()=>{};state.cssPpi=96;state.calibrated=true');
+  const dimensions = a.json('state.devices.map(dimensions)');
+  const specs = a.json(`browserPageSpecs(state.devices,'https://example.com/')`);
+  const before = a.run('millimetersToCss(100)');
+  assert.equal(a.run('setLiveCalibration(120)'), true);
+  assert.ok(Math.abs(a.run('millimetersToCss(100)') / before - 1.25) < 1e-9);
+  assert.deepEqual(a.json('state.devices.map(dimensions)'), dimensions);
+  assert.deepEqual(a.json(`browserPageSpecs(state.devices,'https://example.com/')`), specs);
+  assert.deepEqual(a.json('calibrationSliderBounds(120)'), { min: 25, max: 400 });
+  assert.deepEqual(a.json('calibrationSliderBounds(1)'), { min: 1, max: 400 });
+  assert.deepEqual(a.json('calibrationSliderBounds(4500)'), { min: 25, max: 4500 });
+  for (const input of ['', 'NaN', '0', '5001']) assert.equal(a.run(`setLiveCalibration(${JSON.stringify(input)})`), false);
+  assert.equal(a.run('state.cssPpi'), 120);
+});
