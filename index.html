@@ -1,0 +1,1301 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: GPL-3.0-only
+     DeviceScale Lab is free software under GNU GPL version 3.
+     Distributed without warranty. See LICENSE for the full terms. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DeviceScale Lab 0.01.261105.01 - Screen Size & Responsive Mockup Studio</title>
+<style>
+:root{color-scheme:dark;--bg:#090f1b;--panel:#101a29;--panel2:#162235;--ink:#f0f5ff;--muted:#94a6bf;--line:#2a3a51;--blue:#81b5ff;--cyan:#6fe1da;--accent:#7aa8f5;--danger:#ffb0b3;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Inter,Segoe UI,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);min-width:320px}button,input,select,textarea{font:inherit}button,select,input,textarea{outline-offset:3px}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.45}button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--cyan)}
+.shell{display:flex;flex-direction:column;min-height:100vh;height:100vh;overflow:hidden}.topbar{min-height:68px;padding:13px 21px;background:linear-gradient(120deg,#101d31,#0d1421);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.brand{display:flex;align-items:center;gap:12px}.brandmark{width:39px;height:39px;border:1px solid #48789c;border-radius:12px;display:grid;place-items:center;background:linear-gradient(140deg,#244776,#11283c);color:#dceeff;font-size:20px;font-weight:700}.brandtext strong{font-size:16px;letter-spacing:.2px;display:block}.brandtext small{color:var(--muted);font-size:11px}.header-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.workspace{display:grid;grid-template-columns:340px minmax(0,1fr);flex:1;min-height:0}.sidebar{background:var(--panel);border-right:1px solid var(--line);overflow:auto;padding:20px;scrollbar-color:#43536a transparent}.sidebar h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#b8cbe3;margin:0 0 13px}.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}.field label,.label{font-size:12px;color:#bdcce0;font-weight:600}.hint{font-size:11px;color:var(--muted);line-height:1.45}.field select,.field input,.field textarea{width:100%;background:#0b1423;border:1px solid #374860;border-radius:9px;color:var(--ink);padding:10px 11px;min-height:39px}.field input[type=file]{font-size:11px;padding:9px}.field textarea{resize:vertical;min-height:85px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px}.field input[type=number]{font-variant-numeric:tabular-nums}.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}.triple{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.section{border-bottom:1px solid var(--line);padding:1px 0 18px;margin:0 0 19px}.section:last-child{border-bottom:0}.pilltag{display:inline-flex;color:#b5d7fa;background:#19304c;border:1px solid #335375;border-radius:100px;padding:4px 8px;font-size:10px;font-weight:700}.control-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.btn{border:1px solid #405575;color:#e5eefc;background:#1b2a40;border-radius:9px;min-height:36px;padding:8px 12px;font-size:12px;font-weight:650;white-space:nowrap}.btn:hover:not(:disabled){background:#283d58}.btn.primary{background:linear-gradient(135deg,#72b6fc,#8ddad8);color:#0b1b2d;border-color:transparent}.btn.primary:hover:not(:disabled){filter:brightness(1.1)}.btn.ghost{background:transparent;border:1px solid var(--line)}.btn.minor{min-height:29px;padding:5px 8px;font-size:11px}.btn.warn{color:#ffc4c8}.btn.full{width:100%}.segment{display:flex;background:#0d1625;border:1px solid #34435b;border-radius:10px;padding:3px;gap:3px}.segment button{border:0;background:transparent;color:var(--muted);border-radius:7px;padding:7px 12px;font-size:12px;font-weight:700}.segment button.active{background:#294763;color:#ecf6ff}.source-tabs button{flex:1;padding:7px 5px}.toggle{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;color:#c7d7e9;margin:12px 0}.toggle input{accent-color:#75c9e3;width:17px;height:17px}.meter{font-size:11px;color:#bad0e8;background:#13253a;padding:9px 11px;border:1px solid #304965;border-radius:8px;line-height:1.5}.meter strong{color:#9be8d8}.mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-variant-numeric:tabular-nums}.hidden{display:none!important}
+.main{min-width:0;min-height:0;display:flex;flex-direction:column}.toolbar{min-height:66px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap;padding:12px 20px;background:#0d1725}.toolbar-left,.toolbar-right{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.toolbar .stat{font-size:12px;color:var(--muted)}.toolbar .stat b{color:#e2edff}.stage{position:relative;flex:1;min-height:250px;overflow:auto;scrollbar-color:#415875 transparent;background-color:#091220;background-image:radial-gradient(circle at center,#3a557122 1px,transparent 1.2px);background-size:23px 23px}.stage-inner{min-height:100%;display:flex;align-items:center;justify-content:center;padding:42px 28px 74px;min-width:max-content}.device-list{display:flex;align-items:center;gap:28px;width:max-content}.device-card{display:flex;flex-direction:column;align-items:center;gap:13px;flex:0 0 auto}.device-title{width:100%;min-height:49px;display:flex;align-items:center;justify-content:space-between;gap:8px}.device-title .name{font-size:13px;font-weight:760;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.device-title .group{font-size:10px;color:var(--muted);margin-top:4px}.card-buttons{display:flex;gap:5px}.iconbtn{width:27px;height:27px;border:1px solid #32465e;background:#152339;border-radius:8px;color:#d4e5fb;font-size:14px;display:grid;place-items:center}.iconbtn:hover{background:#29435f}.device-shell{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#33445b,#101c2a 34%,#28374a 80%);border:1px solid #53667d;position:relative;flex:none;box-shadow:0 15px 35px #0008,0 0 0 2px #0b1525}.device-screen{background:#fff;overflow:hidden;position:relative;flex:none;isolation:isolate}.device-screen iframe{position:absolute;left:0;top:0;border:0;display:block;transform-origin:top left;max-width:none;max-height:none;background:#f6f8fe}.device-screen img{position:absolute;inset:0;width:100%;height:100%}.safe-top,.safe-bottom,.safe-left,.safe-right{position:absolute;pointer-events:none;background:#69cde42b;z-index:5}.safe-top{top:0;left:0;right:0;border-bottom:1px dashed #21a9d5}.safe-bottom{bottom:0;left:0;right:0;border-top:1px dashed #21a9d5}.safe-left{top:0;bottom:0;left:0;border-right:1px dashed #21a9d5}.safe-right{top:0;bottom:0;right:0;border-left:1px dashed #21a9d5}.cutout{position:absolute;background:#0b111c;z-index:6;top:0;left:50%;transform:translateX(-50%);box-shadow:0 1px 2px #0006;pointer-events:none}.home-button{position:absolute;border:1px solid #8ca0b4;border-radius:50%;pointer-events:none}.device-meta{width:100%;border:1px solid #2b425b;background:#0e1d2e;border-radius:11px;padding:10px 12px;font-size:11px;line-height:1.7;color:#b1c1d9}.device-meta b{color:#f1f6ff;font-weight:700}.device-meta .metahead{display:flex;justify-content:space-between;border-bottom:1px solid #263a4e;padding-bottom:5px;margin-bottom:5px}.stage-note{position:sticky;left:18px;bottom:14px;width:max-content;max-width:calc(100vw - 385px);background:#0f2336e8;border:1px solid #2d4b64;border-radius:8px;padding:9px 12px;color:#bcd4e5;font-size:11px;backdrop-filter:blur(8px);z-index:10}.empty{max-width:420px;margin:auto;text-align:center;color:#9fb5cd}.empty h3{color:#e5f0fc}
+.dialog{background:#111e30;color:var(--ink);border:1px solid #56738a;border-radius:17px;box-shadow:0 30px 100px #000b;width:min(520px,calc(100% - 25px));padding:26px}.dialog::backdrop{background:#01050bd9}.dialog h2{margin:0 0 8px}.dialog p{color:#b2c4db;font-size:13px;line-height:1.55}.calibration-area{background:#0b1522;border:1px solid #34506c;overflow-x:auto;padding:20px 15px;margin:14px 0}.footer{font-size:10px;color:#617992;padding-top:12px}.toast{position:fixed;bottom:20px;right:18px;z-index:1000;border-radius:9px;padding:11px 15px;background:#244966;color:#f2faff;border:1px solid #6c9eb0;box-shadow:0 14px 40px #0008;max-width:350px;font-size:12px;line-height:1.4}
+
+/* Device sorting, shape composer, and foldable previews */
+.device-title{min-height:78px;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:8px}
+.device-title .name{max-width:none;text-align:center}
+.device-title .group{text-align:center}
+.card-buttons{justify-content:center;gap:4px}
+.iconbtn{flex-shrink:0}
+.drag-handle{display:grid;place-items:center;width:27px;height:27px;border:1px dashed #527d9f;border-radius:8px;background:#18314a;color:#c6ecfb;cursor:grab;font-size:16px;touch-action:none}
+.drag-handle:active{cursor:grabbing}
+.iconbtn,.drag-handle{width:24px;height:25px}
+.card-buttons{gap:2px}
+.device-card.drag-over .device-shell{outline:3px solid #65dcdb;outline-offset:5px}
+.rect-list{display:flex;flex-direction:column;gap:5px;max-height:160px;overflow-y:auto;margin:13px 0}
+.rect-row{width:100%;border:1px solid #31465f;background:#112238;color:#c8d9ec;border-radius:8px;min-height:35px;padding:6px 8px;display:flex;gap:8px;align-items:center;text-align:left;font-size:12px}
+.rect-row.active{background:#204461;border-color:#73d9d3;color:white}
+.rect-row .swatch{height:16px;width:16px;min-width:16px;border-radius:4px;border:1px solid #ffffff50}
+.rect-row small{color:#9aaec7;margin-left:auto;font-size:10px}
+.rect-editor{border:1px solid #35516c;background:#122338;border-radius:12px;padding:12px;margin-top:12px}
+.rect-editor h3{font-size:12px;margin:0 0 10px;color:#a3dfe4}
+.rect-editor .field{margin-bottom:9px}
+.rect-editor .field input,.rect-editor .field select{min-height:35px;padding:7px 8px}
+.rect-editor input[type=color],#rectBg{padding:2px 4px;min-height:35px;cursor:pointer}
+.shape-layer{position:absolute;inset:0;z-index:1;overflow:hidden}
+.shape-rect{position:absolute;touch-action:none;user-select:none;cursor:grab;box-shadow:inset 0 0 0 1px #00000023}
+.shape-rect:hover{filter:brightness(1.05)}
+.shape-rect.selected{outline:2px solid #4ef0dc;outline-offset:-1px}
+.shape-resize{display:none;position:absolute;width:12px;height:12px;right:0;bottom:0;background:#f5ffff;border:2px solid #087b94;border-radius:3px;cursor:nwse-resize;touch-action:none}
+.shape-rect.selected .shape-resize{display:block}
+.duo-seam{position:absolute;z-index:7;pointer-events:none;opacity:.66;background:linear-gradient(90deg,#0a102323,#dee9ff15 35%,#050d2149 50%,#c1d2ff18 68%,#141d3147);box-shadow:0 0 6px #070a1228}
+.duo-camera{position:absolute;z-index:7;pointer-events:none;background:#070f1a;border:1px solid #8797a9;box-shadow:inset 0 0 0 2px #162a3f;border-radius:50%}
+
+/* A physical reference stays outside the scaled, scrolling device workspace. */
+.reference-panel{flex:none;padding:12px 20px;background:#0d1c2c;border-top:1px solid var(--line);min-width:0}
+.reference-header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px}
+.ruler-scroll{overflow-x:auto;padding:12px 10px 0;max-width:100%}
+.ruler{position:relative;display:block;flex:none;height:48px;border:0;border-top:1px solid #8fe4dc;background:none;box-sizing:content-box}
+.ruler-tick{position:absolute;top:-1px;width:1px;height:7px;background:#8fe4dc;transform:translateX(-.5px)}
+.ruler-tick.half{height:12px}.ruler-tick.major{height:18px}
+.ruler-number{position:absolute;top:22px;transform:translateX(-50%);font:10px ui-monospace,monospace;color:#c8fff8}
+.ruler-caption{margin:0;color:var(--muted);font-size:11px;line-height:1.5}
+.properties-popup{position:fixed;z-index:50;width:min(340px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;background:#122338;border:1px solid #6da8be;border-radius:14px;padding:15px;box-shadow:0 18px 60px #0009}
+.properties-heading{display:flex;align-items:flex-start;gap:12px;justify-content:space-between}
+.properties-heading h2{font-size:15px;margin:0;overflow-wrap:anywhere}.properties-heading button{flex:none}
+.properties-popup .rect-editor{border:0;padding:0;margin-top:12px}.properties-popup .hint{margin:7px 0 0}
+.shape-rect:focus-visible{outline:3px solid #087b94;outline-offset:-3px}
+.rect-row>span:nth-child(2){overflow-wrap:anywhere;min-width:0}.rect-row small{flex-shrink:0}
+.dialog{max-height:calc(100dvh - 24px);overflow:auto}.file-summary{overflow-wrap:anywhere}
+.shape-description{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.shape-description-line{position:absolute;white-space:pre;line-height:1;pointer-events:none}
+.rect-editor textarea{min-height:76px;font-family:inherit;font-size:12px;line-height:1.4}
+.workspace-status{margin:10px 0 0;font-size:11px;color:var(--muted);overflow-wrap:anywhere}
+.workspace-error{color:var(--danger)}.footer a,.hint a{color:var(--blue)}
+
+@media(max-width:900px){.workspace{grid-template-columns:290px minmax(0,1fr)}.sidebar{padding:15px}.stage-note{max-width:calc(100vw - 335px)}}
+@media(max-width:650px){.shell{height:auto;min-height:100vh}.workspace{display:flex;flex-direction:column}.sidebar{max-height:45vh;border-right:0;border-bottom:1px solid var(--line)}.main{height:66vh;min-height:440px}.stage-note{max-width:calc(100vw - 40px)}.topbar{padding:10px 14px}.toolbar{padding:10px 13px}.stage-inner{padding:35px 20px 75px}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="brand"><div class="brandmark" aria-hidden="true">▣</div><div class="brandtext"><strong>DeviceScale Lab</strong><small>Responsive mockup & physical-size comparator</small></div></div>
+    <div class="header-actions"><span class="pilltag">LOCAL / OFFLINE</span><button class="btn" id="workspacesBtn">Workspaces</button><button class="btn ghost" id="resetBtn">Reset workspace</button><button class="btn" id="openProjectBtn">Open project</button><button class="btn" id="exportProjectBtn" title="Save shared rectangles and device settings as an editable .dslab file">Export project</button><button class="btn" id="exportBtn" title="Available for an uploaded screenshot">Export PNG</button><input id="projectFile" type="file" accept=".dslab" hidden></div>
+  </header>
+  <div class="workspace">
+    <aside class="sidebar" aria-label="DeviceScale controls">
+      <section class="section">
+        <h2>01 / Add a display</h2>
+        <div class="field"><label for="presetSelect">Device / resolution preset</label><select id="presetSelect"></select></div>
+        <div id="presetInfo" class="meter" aria-live="polite"></div>
+        <div id="customFields" class="hidden" style="margin-top:12px">
+          <div class="field"><label for="customName">Profile name</label><input id="customName" value="Custom display" maxlength="120"></div>
+          <div class="pair"><div class="field"><label for="customW">Native width (px)</label><input id="customW" type="number" value="1920" min="100" max="16000"></div><div class="field"><label for="customH">Native height (px)</label><input id="customH" type="number" value="1080" min="100" max="16000"></div></div>
+          <div class="pair"><div class="field"><label for="customDiag">Screen diagonal (in)</label><input id="customDiag" type="number" value="24" min="2" max="100" step="0.1"></div><div class="field"><label for="customDpr">Display scale (DPR)</label><input id="customDpr" type="number" value="1" min="0.5" max="5" step="0.25"></div></div>
+          <p class="hint" style="margin:0 0 12px">On monitors, CSS layout size depends on operating-system display scaling. Edit DPR as needed.</p>
+        </div>
+        <button id="addBtn" class="btn primary full" style="margin-top:12px">+ Add to comparison</button>
+        <button id="addDuoPairBtn" class="btn full" style="margin-top:7px">+ Add iPhone Duo: Front + Open</button>
+      </section>
+      <section class="section">
+        <h2>02 / Mockup content</h2>
+        <div class="segment source-tabs" role="group" aria-label="Mockup content type"><button data-source="demo" class="active">Live demo</button><button data-source="rectangles">Rectangles</button><button data-source="image">Image</button><button data-source="html">HTML</button><button data-source="url">URL</button></div>
+        <div id="demoPanel" style="margin-top:12px"><p class="hint">The sample interface actually reflows inside each device's logical viewport. Resize or rotate to test responsive behavior.</p></div>
+
+        <div id="rectanglesPanel" class="hidden" style="margin-top:12px">
+          <p class="hint">Design one composition of rectangles. Every device shows the same objects, recalculated against its own logical CSS viewport.</p>
+          <div class="field" style="margin-top:10px"><label for="rectBg">Canvas background</label><input id="rectBg" type="color" value="#f5f7fb"></div>
+          <div class="control-row"><button id="addRectBtn" class="btn primary" type="button">+ Rectangle</button><button id="clearRectBtn" class="btn warn" type="button">Clear all</button></div>
+          <div id="rectList" class="rect-list" aria-label="Rectangles in layer order"></div>
+          <div id="rectEditor" class="rect-editor hidden">
+            <h3>Selected rectangle</h3>
+            <div class="field"><label for="rectName">Name</label><input id="rectName" maxlength="56" placeholder="Rectangle"></div>
+            <div class="field"><label for="rectDescription">Description text</label><textarea id="rectDescription" maxlength="1000" rows="3" placeholder="Text displayed inside this rectangle"></textarea></div>
+            <div class="pair"><div class="field"><label for="rectPosUnit">Position unit (X,Y)</label><select id="rectPosUnit"><option value="%">Percent (%)</option><option value="px">CSS pixels</option></select></div><div class="field"><label for="rectSizeUnit">Size unit (W,H)</label><select id="rectSizeUnit"><option value="%">Percent (%)</option><option value="px">CSS pixels</option></select></div></div>
+            <div class="pair"><div class="field"><label for="rectX">X / left</label><input id="rectX" type="number" step="0.1"></div><div class="field"><label for="rectY">Y / top</label><input id="rectY" type="number" step="0.1"></div></div>
+            <div class="pair"><div class="field"><label for="rectW">Width</label><input id="rectW" type="number" min="0.1" step="0.1"></div><div class="field"><label for="rectH">Height</label><input id="rectH" type="number" min="0.1" step="0.1"></div></div>
+            <div class="pair"><div class="field"><label for="rectFill">Fill color</label><input id="rectFill" type="color" value="#2768a3"></div><div class="field"><label for="rectOpacity">Opacity (%)</label><input id="rectOpacity" type="number" min="0" max="100" step="1" value="100"></div></div>
+            <div class="control-row"><button id="duplicateRectBtn" class="btn minor">Duplicate</button><button id="rectBackBtn" class="btn minor">Send back</button><button id="rectForwardBtn" class="btn minor">Bring forward</button><button id="deleteRectBtn" class="btn minor warn">Delete</button></div>
+          </div>
+          <p class="hint" style="margin-top:12px">Click a rectangle to edit its properties, drag to move, or use its lower-right handle to resize. Export project saves these shared objects and devices in an editable .dslab file.</p>
+        </div>
+        <div id="imagePanel" class="hidden" style="margin-top:12px"><div class="field"><label for="imageFile">Upload screenshot / mockup</label><input type="file" id="imageFile" accept="image/png,image/jpeg,image/webp,image/svg+xml"></div><div class="field"><label for="imageFit">Image placement</label><select id="imageFit"><option value="contain">Contain (whole image)</option><option value="cover">Cover (crop edges)</option><option value="fill">Stretch (distorts proportions)</option></select></div><p class="hint">A single screenshot is static. It does not truly rearrange components at different breakpoints.</p></div>
+        <div id="htmlPanel" class="hidden" style="margin-top:12px"><div class="field"><label for="htmlFile">Load an HTML file (optional)</label><input type="file" id="htmlFile" accept=".html,.htm,text/html"></div><div class="field"><label for="htmlText">Or paste responsive HTML</label><textarea id="htmlText" spellcheck="false" placeholder="<!doctype html> ..."></textarea></div><button class="btn full" id="applyHtmlBtn">Apply HTML to every preview</button><p class="hint">Rendered in sandboxed iframes. Absolute assets and some linked resources may not load offline.</p></div>
+        <div id="urlPanel" class="hidden" style="margin-top:12px"><div class="field"><label for="urlText">Web page URL</label><input type="url" id="urlText" placeholder="https://example.com"></div><button class="btn full" id="applyUrlBtn">Preview website</button><p class="hint">Only sites that permit iframe embedding work. Some sites block this for security; a local HTML file is more reliable.</p></div>
+      </section>
+      <section class="section">
+        <h2>03 / Your viewing monitor</h2>
+        <p class="hint">These inputs describe the monitor showing this tool, not the Apple device being simulated.</p>
+        <div class="pair"><div class="field"><label for="monitorBrand">Brand</label><select id="monitorBrand"></select></div><div class="field"><label for="monitorSize">Size class</label><select id="monitorSize"></select></div></div>
+        <div class="field"><label for="monitorModel">Monitor / MacBook model</label><select id="monitorModel" aria-describedby="monitorModelInfo"></select></div>
+        <p id="monitorModelInfo" class="hint" aria-live="polite"></p>
+        <p class="hint">Choosing a model fills its diagonal only. Set resolution and DPR below for your display setup, then check the ruler. External monitors: 27 inches and larger.</p>
+        <div class="field"><label for="monitorPreset">Resolution preset (16:9)</label><select id="monitorPreset"><option value="1920x1080">Full HD · 1920 × 1080</option><option value="2560x1440">QHD · 2560 × 1440</option><option value="3840x2160">4K UHD · 3840 × 2160</option><option value="5120x2880">5K · 5120 × 2880</option><option value="7680x4320">8K UHD · 7680 × 4320</option><option value="custom">Custom resolution</option></select></div>
+        <div class="pair"><div class="field"><label for="monitorW">Resolution W (px)</label><input id="monitorW" type="number" min="640" max="16000" value="1920"></div><div class="field"><label for="monitorH">Resolution H (px)</label><input id="monitorH" type="number" min="480" max="10000" value="1080"></div></div>
+        <div class="pair"><div class="field"><label for="monitorDiag">Physical diagonal (in)</label><input id="monitorDiag" type="number" min="8" max="120" step="0.01" value="24"></div><div class="field"><label for="monitorDpr">Browser DPR</label><input id="monitorDpr" type="number" min="0.5" max="5" step="0.25" value="1"></div></div>
+        <div id="monitorInfo" class="meter"></div>
+        <div class="control-row" style="margin-top:11px"><button class="btn full" id="calibrateBtn">Calibrate real-world size →</button></div>
+        <p class="hint">On macOS, Retina scaling and browser zoom can make resolution-based estimates inaccurate. Use a ruler for physical 1:1 comparisons.</p>
+      </section>
+      <section class="section">
+        <h2>04 / Overlays & behavior</h2>
+        <label class="toggle">Show approximate safe areas <input type="checkbox" id="safeToggle" checked></label>
+        <label class="toggle">Show decorative device bezel <input type="checkbox" id="frameToggle" checked></label>
+        <label class="toggle">Show physical dimensions <input type="checkbox" id="dimensionToggle" checked></label>
+        <label class="toggle">Show iPhone Duo fold seam <input type="checkbox" id="duoSeamToggle" checked></label>
+        <p class="hint">Safe-area indicators and decorative frames are approximations, not Apple device simulators. A browser cannot reproduce every native iOS/iPadOS behavior.</p>
+      </section>
+      <div class="footer">iPhone Duo outer and inner dimensions from Apple (2026). Rectangle units are logical CSS pixels, not native pixels. Presets based on Apple technical specifications. Locally saved settings contain no uploaded image or HTML. No account or server required.</div>
+      <p id="currentWorkspaceLabel" class="workspace-status"></p>
+      <p id="autosaveStatus" class="workspace-status" role="status">Autosave ready</p>
+      <div class="footer">DeviceScale Lab <span id="appVersion">0.01.261105.01</span> · <a href="LICENSE" target="_blank" rel="noopener">GPLv3</a><br>Free software under GPL version 3. You may redistribute it under that license. Provided without warranty.</div>
+    </aside>
+    <main class="main">
+      <div class="toolbar">
+        <div class="toolbar-left"><div class="segment" aria-label="Scale mode"><button id="fitMode" class="active">Fit all</button><button id="physicalMode">Physical 1:1</button></div><span id="scaleInfo" class="stat mono">—</span><button class="btn minor" id="rulerBtn" aria-controls="referencePanel" aria-expanded="true">Ruler & calibration</button></div>
+        <div class="toolbar-right"><span class="stat">Rotate all</span><button class="btn minor" id="portraitAll">Portrait</button><button class="btn minor" id="landscapeAll">Landscape</button><span id="deviceCount" class="stat"></span></div>
+      </div>
+      <div id="stage" class="stage" aria-label="Side-by-side device previews"><div id="stageInner" class="stage-inner"><div id="deviceList" class="device-list"></div></div><div class="stage-note" id="stageNote">Fit mode keeps the devices' real size ratios; absolute size requires calibration.</div></div>
+      <section id="referencePanel" class="reference-panel" aria-label="Physical reference ruler">
+        <div class="reference-header"><strong>100 mm reference · <span id="rulerStatus">Estimated</span></strong><button class="btn minor" id="referenceCalibrateBtn">Calibrate with a ruler</button></div>
+        <div class="ruler-scroll"><div id="physicalRuler" class="ruler" role="img" aria-label="100 millimeter reference ruler with centimeter labels"></div></div>
+        <p class="ruler-caption">Numbers in cm · Compare 0–10 with a physical ruler. Recheck after changing monitor or browser zoom.</p>
+      </section>
+    </main>
+  </div>
+</div>
+<dialog id="calibrationDialog" class="dialog" aria-labelledby="calibrationTitle">
+  <h2 id="calibrationTitle">Calibrate actual physical size</h2>
+  <p>Place a physical ruler against the line below. Its <strong>target length is 100 mm</strong>. Enter the real length you measure on your monitor. The app corrects its CSS-pixels-per-inch value.</p>
+  <div class="calibration-area"><div class="ruler" id="calibrationRuler" role="img" aria-label="100 millimeter calibration ruler with centimeter labels"></div></div>
+  <p class="hint">Measure between the 0 and 10 cm marks. Scroll to see the full ruler if needed.</p>
+  <div class="pair"><div class="field"><label for="measuredMm">Actual measured length (mm)</label><input id="measuredMm" type="number" value="100" min="10" max="500" step="any" required></div><div class="field"><label for="manualPpi">CSS pixels per inch</label><input id="manualPpi" type="number" min="1" max="5000" step="any" required></div></div>
+  <p id="calibrationInfo" class="meter"></p>
+  <div class="control-row" style="justify-content:flex-end"><button class="btn ghost" id="closeCalibration">Cancel</button><button class="btn" id="resetCalibration">Re-estimate</button><button class="btn primary" id="saveCalibration">Apply calibration</button></div>
+</dialog>
+<section id="rectPopup" class="properties-popup hidden" role="dialog" aria-modal="false" aria-labelledby="rectPopupTitle">
+  <div class="properties-heading"><h2 id="rectPopupTitle">Rectangle properties</h2><button id="closeRectPopup" class="iconbtn" aria-label="Close rectangle properties">×</button></div>
+  <p id="rectPopupContext" class="hint"></p>
+</section>
+<dialog id="importDialog" class="dialog" aria-labelledby="importTitle">
+  <h2 id="importTitle">Open rectangle project</h2>
+  <p id="importSummary" class="file-summary"></p>
+  <p>This replaces the current workspace content and devices. Your monitor calibration stays on this computer. Export the current project first if you want to keep it.</p>
+  <div class="control-row" style="justify-content:flex-end"><button id="cancelImportBtn" class="btn ghost">Cancel</button><button id="confirmImportBtn" class="btn primary">Replace workspace</button></div>
+</dialog>
+<dialog id="workspacesDialog" class="dialog" aria-labelledby="workspacesTitle">
+  <h2 id="workspacesTitle">Named workspaces</h2>
+  <p>Your latest working layout is autosaved, including when you leave. Named workspaces are separate copies; choose Update to replace a saved copy.</p>
+  <div class="field"><label for="savedWorkspaceSelect">Saved workspace</label><select id="savedWorkspaceSelect"><option value="">Select a saved workspace</option></select></div>
+  <p id="savedWorkspaceSummary" class="hint"></p>
+  <div class="field"><label for="workspaceName">Workspace name</label><input id="workspaceName" maxlength="64" required placeholder="e.g. Phone and tablet review"></div>
+  <div class="control-row"><button id="saveWorkspaceBtn" class="btn primary">Save new</button><button id="updateWorkspaceBtn" class="btn">Update</button><button id="loadWorkspaceBtn" class="btn">Load</button><button id="deleteWorkspaceBtn" class="btn warn">Delete</button><button id="exportWorkspaceBtn" class="btn">Export</button></div>
+  <p class="hint">Save new and Update use your current rectangles and devices. Export downloads the selected saved copy. Images, HTML, and websites are session-only; monitor calibration stays on this computer.</p>
+  <p id="workspaceLibraryStatus" class="workspace-status" role="status"></p>
+  <div class="control-row" style="justify-content:flex-end;margin-top:16px"><button id="closeWorkspacesBtn" class="btn ghost">Close</button></div>
+</dialog>
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+<script>
+'use strict';
+const APP_VERSION='0.01.261105.01';
+// Offline viewing-display references, checked against manufacturer specifications.
+// sizeClass is the marketed size; diag is the published display diagonal.
+// Native resolution is reference data only, never applied to the user's settings.
+const MONITOR_CATALOG_CHECKED='2026-11-05';
+const MONITOR_CATALOG=[
+  ['apple-studio-2022','Apple','Monitor',27,27,'Studio Display (2022)',5120,2880,'https://support.apple.com/en-us/111890'],
+  ['apple-studio-2026','Apple','Monitor',27,27,'Studio Display (2026)',5120,2880,'https://www.apple.com/studio-display/specs/'],
+  ['apple-studio-xdr','Apple','Monitor',27,27,'Studio Display XDR (2026)',5120,2880,'https://www.apple.com/studio-display-xdr/specs/'],
+  ['apple-pro-xdr','Apple','Monitor',32,32,'Pro Display XDR (2019)',6016,3384,'https://support.apple.com/en-us/111892'],
+  ['aoc-u27p3c','AOC','Monitor',27,27,'U27P3C',3840,2160,'https://saas.aoc.com/product/U27P3C'],
+  ['aoc-u27p2c','AOC','Monitor',27,27,'U27P2C',3840,2160,'https://saas.aoc.com/product/U27P2C'],
+  ['aoc-q27p3cv','AOC','Monitor',27,27,'Q27P3CV',2560,1440,'https://www-acc.aoc.com/api/asset/pi26321'],
+  ['aoc-q32p2c','AOC','Monitor',32,31.5,'Q32P2C',2560,1440,'https://saas.aoc.com/product/Q32P2C'],
+  ['aoc-u32v11n','AOC','Monitor',32,31.5,'U32V11N',3840,2160,'https://saas.aoc.com/product/U32V11N'],
+  ['aoc-cu34p3cv','AOC','Monitor',34,34,'CU34P3CV',3440,1440,'https://aoc.com/us/products/499/leaflet?language=en-US'],
+  ['aoc-cu34g2xp','AOC','Monitor',34,34,'CU34G2XP',3440,1440,'https://saas.aoc.com/index/search/?category%5B%5D=8&class=&keywords=QHD'],
+  ['aoc-ag493ucx2','AOC','Monitor',49,48.8,'AGON AG493UCX2',5120,1440,'https://www.aoc.com/us/gaming/monitors/ag493ucx2'],
+  ['dell-u2723qe','Dell','Monitor',27,27,'UltraSharp 27 4K (U2723QE)',3840,2160,'https://www.delltechnologies.com/asset/en-gb/products/electronics-and-accessories/technical-support/dell-ultrasharp-27-and-32-usbc-hub-monitors-u2723qe-u3223qe-datasheet.pdf'],
+  ['dell-u3223qe','Dell','Monitor',32,31.5,'UltraSharp 32 4K (U3223QE)',3840,2160,'https://www.delltechnologies.com/asset/en-gb/products/electronics-and-accessories/technical-support/dell-ultrasharp-27-and-32-usbc-hub-monitors-u2723qe-u3223qe-datasheet.pdf'],
+  ['dell-u2725qe','Dell','Monitor',27,27,'UltraSharp 27 4K (U2725QE)',3840,2160,'https://www.dell.com/en-us/shop/Monitors/apd/Dell-UltraSharp-27-4K-Thunderbolt-Hub-Monitor---U2725QE/u2725qe_monitor/-'],
+  ['dell-u3225qe','Dell','Monitor',32,31.5,'UltraSharp 32 4K (U3225QE)',3840,2160,'https://www.dell.com/en-us/shop/dell-ultrasharp-32-4k-thunderbolt-hub-monitor-u3225qe/apd/210-bqhs/computer-monitors'],
+  ['dell-u3425we','Dell','Monitor',34,34.14,'UltraSharp 34 (U3425WE)',3440,1440,'https://www.dell.com/en-uk/shop/u3425we-monitor/apd/210-bmdw/'],
+  ['dell-u4025qw','Dell','Monitor',40,39.7,'UltraSharp 40 5K2K (U4025QW)',5120,2160,'https://www.dell.com/en-us/shop/dell-ultrasharp-40-curved-thunderbolt-hub-monitor-u4025qw/apd/210-bmdp'],
+  ['dell-u4323qe','Dell','Monitor',43,42.5,'UltraSharp 43 4K (U4323QE)',3840,2160,'https://www.dell.com/en-us/shop/monitors/apd/dell-ultrasharp-43-4k-usb-c-hub-monitor-u4323qe/u4323qe_monitor/-'],
+  ['dell-u4924dw','Dell','Monitor',49,49,'UltraSharp 49 (U4924DW)',5120,1440,'https://www.dell.com/en-us/shop/monitors/apd/dell-ultrasharp-49-curved-usbc-monitor-u4924dw-1245cm49-black-/u4924dw_monitor/-'],
+  ['mba13-m1','Apple','MacBook Air',13,13.3,'MacBook Air (13-inch, M1, 2020)',2560,1600,'https://support.apple.com/en-us/111883'],
+  ['mba13-m2','Apple','MacBook Air',13,13.6,'MacBook Air (13-inch, M2, 2022)',2560,1664,'https://support.apple.com/en-us/111867'],
+  ['mba15-m2','Apple','MacBook Air',15,15.3,'MacBook Air (15-inch, M2, 2023)',2880,1864,'https://support.apple.com/en-us/111346'],
+  ['mba13-m3','Apple','MacBook Air',13,13.6,'MacBook Air (13-inch, M3, 2024)',2560,1664,'https://support.apple.com/en-us/118551'],
+  ['mba15-m3','Apple','MacBook Air',15,15.3,'MacBook Air (15-inch, M3, 2024)',2880,1864,'https://support.apple.com/en-us/118552'],
+  ['mba13-m4','Apple','MacBook Air',13,13.6,'MacBook Air (13-inch, M4, 2025)',2560,1664,'https://support.apple.com/en-us/122209'],
+  ['mba15-m4','Apple','MacBook Air',15,15.3,'MacBook Air (15-inch, M4, 2025)',2880,1864,'https://support.apple.com/en-us/122210'],
+  ['mba13-m5','Apple','MacBook Air',13,13.6,'MacBook Air (13-inch, M5, 2026)',2560,1664,'https://www.apple.com/macbook-air/specs/'],
+  ['mba15-m5','Apple','MacBook Air',15,15.3,'MacBook Air (15-inch, M5, 2026)',2880,1864,'https://support.apple.com/en-us/126321'],
+  ['mbp13-m1','Apple','MacBook Pro',13,13.3,'MacBook Pro (13-inch, M1, 2020)',2560,1600,'https://support.apple.com/en-us/111893'],
+  ['mbp14-m1pro','Apple','MacBook Pro',14,14.2,'MacBook Pro (14-inch, M1 Pro / Max, 2021)',3024,1964,'https://support.apple.com/en-us/111902'],
+  ['mbp16-m1pro','Apple','MacBook Pro',16,16.2,'MacBook Pro (16-inch, M1 Pro / Max, 2021)',3456,2234,'https://support.apple.com/en-us/111901'],
+  ['mbp13-m2','Apple','MacBook Pro',13,13.3,'MacBook Pro (13-inch, M2, 2022)',2560,1600,'https://support.apple.com/en-us/111869'],
+  ['mbp14-m2pro','Apple','MacBook Pro',14,14.2,'MacBook Pro (14-inch, M2 Pro / Max, Jan 2023)',3024,1964,'https://support.apple.com/en-us/111340'],
+  ['mbp16-m2pro','Apple','MacBook Pro',16,16.2,'MacBook Pro (16-inch, M2 Pro / Max, Jan 2023)',3456,2234,'https://support.apple.com/en-us/111838'],
+  ['mbp14-m3','Apple','MacBook Pro',14,14.2,'MacBook Pro (14-inch, M3, Nov 2023)',3024,1964,'https://support.apple.com/en-us/117735'],
+  ['mbp14-m3pro','Apple','MacBook Pro',14,14.2,'MacBook Pro (14-inch, M3 Pro / Max, Nov 2023)',3024,1964,'https://support.apple.com/en-us/117736'],
+  ['mbp16-m3pro','Apple','MacBook Pro',16,16.2,'MacBook Pro (16-inch, M3 Pro / Max, Nov 2023)',3456,2234,'https://support.apple.com/en-us/117737'],
+  ['mbp14-m4','Apple','MacBook Pro',14,14.2,'MacBook Pro (14-inch, M4, 2024)',3024,1964,'https://support.apple.com/en-us/121552'],
+  ['mbp14-m4pro','Apple','MacBook Pro',14,14.2,'MacBook Pro (14-inch, M4 Pro / Max, 2024)',3024,1964,'https://support.apple.com/en-us/121553'],
+  ['mbp16-m4pro','Apple','MacBook Pro',16,16.2,'MacBook Pro (16-inch, M4 Pro / Max, 2024)',3456,2234,'https://support.apple.com/en-us/121554'],
+  ['mbp14-m5','Apple','MacBook Pro',14,14.2,'MacBook Pro (14-inch, M5, 2025)',3024,1964,'https://support.apple.com/en-us/125405'],
+  ['mbp14-m5pro','Apple','MacBook Pro',14,14.2,'MacBook Pro (14-inch, M5 Pro / Max, 2026, Liquid Retina XDR)',3024,1964,'https://www.apple.com/macbook-pro/liquid-retina-xdr-display/specs/'],
+  ['mbp16-m5pro','Apple','MacBook Pro',16,16.2,'MacBook Pro (16-inch, M5 Pro / Max, 2026, Liquid Retina XDR)',3456,2234,'https://www.apple.com/macbook-pro/liquid-retina-xdr-display/specs/'],
+  ['mbp14-m6','Apple','MacBook Pro',14,14.2,'MacBook Pro (14-inch, M6, 2026)',3024,1964,'https://www.apple.com/macbook-pro/liquid-retina-xdr-display/specs/','Announced; available November 6, 2026.'],
+  ['mbp14-m5pro-oled','Apple','MacBook Pro',14,14.2,'MacBook Pro (14-inch, M5 Pro / Max, 2026, PROLED XDR)',3024,1986,'https://www.apple.com/macbook-pro/proled-xdr-display/specs/','Announced; available November 6, 2026.'],
+  ['mbp16-m5pro-oled','Apple','MacBook Pro',16,16.3,'MacBook Pro (16-inch, M5 Pro / Max, 2026, PROLED XDR)',3472,2266,'https://www.apple.com/macbook-pro/proled-xdr-display/specs/','Announced; available November 6, 2026.']
+].map(([id,brand,kind,sizeClass,diag,name,nativeW,nativeH,source,note=''])=>({id,brand,kind,sizeClass,diag,name,nativeW,nativeH,source,note}));
+const PRESETS=[
+  {id:'se3',name:'iPhone SE (3rd gen)',family:'iPhone',w:750,h:1334,diag:4.7,dpr:2,cutout:'home',safeTop:20,safeBottom:0},
+  {id:'13pm',name:'iPhone 13 Pro Max',family:'iPhone',w:1284,h:2778,diag:6.7,dpr:3,cutout:'notch',safeTop:47,safeBottom:34},
+  {id:'duoFront',name:'iPhone Duo - Front (closed)',family:'iPhone',w:1398,h:2034,diag:5.4,dpr:3,cutout:'duo-front',duoView:'front',safeTop:52,safeBottom:30,defaultOrientation:'portrait'},
+  {id:'duoOpen',name:'iPhone Duo - Open (2 panels)',family:'iPhone',w:1878,h:2670,diag:7.6,dpr:3,cutout:'duo-open',duoView:'open',safeTop:38,safeBottom:25,defaultOrientation:'landscape'},
+  {id:'17',name:'iPhone 17',family:'iPhone',w:1206,h:2622,diag:6.27,dpr:3,cutout:'island',safeTop:62,safeBottom:34},
+  {id:'18pro',name:'iPhone 18 Pro',family:'iPhone',w:1206,h:2622,diag:6.27,dpr:3,cutout:'island',safeTop:62,safeBottom:34},
+  {id:'18pm',name:'iPhone 18 Pro Max',family:'iPhone',w:1320,h:2868,diag:6.86,dpr:3,cutout:'island',safeTop:62,safeBottom:34},
+  {id:'minia17',name:'iPad mini (A17 Pro)',family:'iPad',w:1488,h:2266,diag:8.3,dpr:2,cutout:'none',safeTop:24,safeBottom:20},
+  {id:'air11m3',name:'iPad Air 11” (M3)',family:'iPad',w:1640,h:2360,diag:10.86,dpr:2,cutout:'none',safeTop:24,safeBottom:20},
+  {id:'air11m4',name:'iPad Air 11” (M4)',family:'iPad',w:1640,h:2360,diag:10.86,dpr:2,cutout:'none',safeTop:24,safeBottom:20},
+  {id:'air13m4',name:'iPad Air 13” (M4)',family:'iPad',w:2048,h:2732,diag:12.9,dpr:2,cutout:'none',safeTop:24,safeBottom:20},
+  {id:'pro11m5',name:'iPad Pro 11” (M5)',family:'iPad',w:1668,h:2420,diag:11.1,dpr:2,cutout:'none',safeTop:24,safeBottom:20},
+  {id:'pro13m5',name:'iPad Pro 13” (M5)',family:'iPad',w:2064,h:2752,diag:13,dpr:2,cutout:'none',safeTop:24,safeBottom:20},
+  {id:'fhd',name:'Full HD · 1920×1080 (24”)',family:'Monitor',w:1920,h:1080,diag:24,dpr:1,cutout:'none'},
+  {id:'qhd',name:'QHD · 2560×1440 (27”)',family:'Monitor',w:2560,h:1440,diag:27,dpr:1,cutout:'none'},
+  {id:'4k',name:'4K UHD · 3840×2160 (27”)',family:'Monitor',w:3840,h:2160,diag:27,dpr:2,cutout:'none'},
+  {id:'5k',name:'5K · 5120×2880 (27”)',family:'Monitor',w:5120,h:2880,diag:27,dpr:2,cutout:'none'},
+  {id:'8k',name:'8K UHD · 7680×4320 (32”)',family:'Monitor',w:7680,h:4320,diag:32,dpr:2,cutout:'none'},
+  {id:'custom',name:'Custom resolution & diagonal',family:'Custom',w:1920,h:1080,diag:24,dpr:1,cutout:'none'}
+];
+const $=id=>document.getElementById(id);
+const clamp=(x,min,max)=>Math.min(max,Math.max(min,x));
+const safeNum=(value,def,min,max)=>{const n=Number(value);return Number.isFinite(n)?clamp(n,min,max):def};
+const uid=()=>Math.random().toString(36).slice(2,11);
+const starterRects=()=>[
+ {id:'shape-1',name:'Top navigation',description:'',x:0,y:0,w:100,h:11,posUnit:'%',sizeUnit:'%',fill:'#17365c',opacity:100},
+ {id:'shape-2',name:'Main highlight',description:'',x:5,y:17,w:90,h:26,posUnit:'%',sizeUnit:'%',fill:'#5b9edc',opacity:100},
+ {id:'shape-3',name:'Left content card',description:'',x:5,y:49,w:43,h:21,posUnit:'%',sizeUnit:'%',fill:'#bdd8ed',opacity:100},
+ {id:'shape-4',name:'Right content card',description:'',x:52,y:49,w:43,h:21,posUnit:'%',sizeUnit:'%',fill:'#84c1c9',opacity:100},
+ {id:'shape-5',name:'Footer bar',description:'',x:0,y:90,w:100,h:10,posUnit:'%',sizeUnit:'%',fill:'#223f64',opacity:100}
+];
+const defaults=()=>({workspaceName:'Untitled workspace',savedWorkspaceId:null,devices:[{...PRESETS[0],instance:uid(),orientation:'portrait'},{...PRESETS[1],instance:uid(),orientation:'portrait'},{...PRESETS.find(d=>d.id==='pro13m5'),instance:uid(),orientation:'portrait'}],source:'demo',imageFit:'contain',imageSrc:null,imageObject:null,html:'',url:'',mode:'fit',monitorModelId:'',monitorBrand:'all',monitorSize:'all',monitorW:1920,monitorH:1080,monitorDiag:24,monitorDpr:window.devicePixelRatio||1,cssPpi:null,calibrated:false,safe:true,frame:true,dimensions:true,duoSeam:true,rectangles:starterRects(),rectSelected:'shape-2',rectBg:'#f5f7fb'});
+let state=defaults();let cachedFit=1;let renderQueued=false;let toastTimer;
+const DEMO_HTML=`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}body{margin:0;font-family:-apple-system,system-ui,sans-serif;background:#f3f6fb;color:#162641;font-size:14px}.wrap{min-height:100vh;display:grid;grid-template-columns:1fr}.side{display:none;background:#102641;color:#ecf6ff;padding:32px 18px}.side h2{font-size:22px;margin:0 0 35px;letter-spacing:-.7px}.side p{padding:12px;border-radius:10px;background:#244361;color:#e7f1ff}.main{padding:21px 16px 40px;min-width:0}.top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:30px}.mark{font-weight:850;color:#174f83;font-size:16px}.avatar{width:35px;height:35px;border-radius:50%;background:#dbedff;display:grid;place-items:center;color:#174b70;font-weight:800}.eyebrow{color:#7490aa;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase}.headline{font-size:clamp(23px,3.5vw,42px);line-height:1.1;margin:10px 0 9px;letter-spacing:-1.3px}.sub{color:#6c819b;font-size:13px;line-height:1.5}.hero{margin-top:22px;padding:22px;background:linear-gradient(125deg,#163f7b,#1878a3);color:#fff;border-radius:18px;min-height:150px;display:flex;align-items:center;justify-content:space-between;overflow:hidden}.hero small{opacity:.76}.hero strong{font-size:clamp(25px,4.3vw,42px);display:block;margin:10px 0}.orb{width:90px;height:90px;border-radius:50%;background:radial-gradient(circle at 35% 25%,#ccfefa,#60b8fa 42%,#125281 75%);box-shadow:0 0 40px #acf6eb6d;flex-shrink:0;margin-right:-25px}.section-title{font-size:15px;margin:26px 0 13px}.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card{background:#fff;border:1px solid #e1e9f3;border-radius:13px;padding:17px 12px;min-width:0;box-shadow:0 4px 12px #1c43600a}.card small{font-size:10px;color:#738aa5}.card b{display:block;font-size:clamp(15px,2vw,24px);margin:7px 0}.delta{font-size:10px;color:#118b7d}.activity{background:#fff;border-radius:13px;padding:13px 15px;margin-top:13px;display:flex;justify-content:space-between;gap:10px;border:1px solid #e1e9f3}.activity b{font-size:12px}.activity small{display:block;color:#91a0b5;margin-top:5px;font-size:10px}.foot{margin-top:26px;color:#9aacbf;font-size:10px}.bottomnav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-around;padding:12px 0;font-size:11px;color:#6b849d}@media(min-width:600px){.main{padding:32px}.cards{grid-template-columns:repeat(4,1fr)}.hero{padding:35px}.orb{width:155px;height:155px;margin-right:20px}.bottomnav{display:none}}@media(min-width:900px){.wrap{grid-template-columns:220px 1fr}.side{display:block}.top .mark{display:none}.main{padding:45px}.cards{gap:18px}.card{padding:22px}.card b{font-size:28px}}@media(max-width:380px){.hero{padding:15px}.headline{font-size:24px}.orb{width:60px;height:60px}.main{padding:18px 12px 70px}.cards{gap:7px}.card{padding:12px 9px}}</style></head><body><div class="wrap"><aside class="side"><h2>◈ Meridian</h2><p>▣ &nbsp; Overview</p><p>◷ &nbsp; Timeline</p><p>▦ &nbsp; Analytics</p><p>⚙ &nbsp; Settings</p></aside><div class="main"><div class="top"><div class="mark">◈ Meridian</div><div class="avatar">M</div></div><div class="eyebrow">YOUR WORKSPACE</div><h1 class="headline">A clearer view<br>of your day.</h1><p class="sub">Your overview, redesigned for every screen size.</p><section class="hero"><div><small>Weekly progress</small><strong>84%</strong><small>↗ &nbsp; +12% this week</small></div><div class="orb"></div></section><h3 class="section-title">At a glance</h3><div class="cards"><div class="card"><small>Completed</small><b>28</b><span class="delta">↗ 8.2%</span></div><div class="card"><small>In progress</small><b>12</b><span class="delta">↗ 4.6%</span></div><div class="card"><small>Team members</small><b>07</b><span class="delta">● Active</span></div><div class="card"><small>Upcoming</small><b>05</b><span class="delta">This week</span></div></div><h3 class="section-title">Recent activity</h3><div class="activity"><div><b>Design system review</b><small>Today · Product team</small></div><span>✓</span></div><div class="activity"><div><b>Responsive layout audit</b><small>Yesterday · UI team</small></div><span>✓</span></div><p class="foot">Meridian • Demo interface for DeviceScale Lab</p></div></div><div class="bottomnav"><span>⌂ Home</span><span>▦ Explore</span><span>◷ Timeline</span><span>⚙ Settings</span></div></body></html>`;
+function physicalDimensions(d,orientation){
+  const short=Math.min(d.w,d.h),long=Math.max(d.w,d.h),hyp=Math.hypot(short,long);
+  const portrait=orientation==='portrait';
+  return {inchW:(portrait?short:long)/hyp*d.diag,inchH:(portrait?long:short)/hyp*d.diag,nativeW:portrait?short:long,nativeH:portrait?long:short,logicalW:(portrait?short:long)/d.dpr,logicalH:(portrait?long:short)/d.dpr};
+}
+function estimatePpi(){return Math.hypot(state.monitorW,state.monitorH)/state.monitorDiag/state.monitorDpr}
+function realPpi(){return state.cssPpi||estimatePpi()}
+const millimetersToCss=(mm,ppi=realPpi())=>mm*ppi/25.4;
+function calibratedDensity(ppi,measuredMm){
+  if(!Number.isFinite(ppi)||ppi<1||ppi>5000)throw Error('Enter a CSS density between 1 and 5000.');
+  if(!Number.isFinite(measuredMm)||measuredMm<10||measuredMm>500)throw Error('Enter the measured length between 10 and 500 mm.');
+  const corrected=ppi*100/measuredMm;
+  if(corrected<1||corrected>5000)throw Error('Check the measurement: the corrected density is outside the supported range.');
+  return corrected;
+}
+function drawRuler(node,ppi){
+  node.style.width=millimetersToCss(100,ppi)+'px';
+  if(node.childElementCount)return;
+  for(let mm=0;mm<=100;mm++){
+    const tick=document.createElement('i');tick.className='ruler-tick'+(mm%10===0?' major':mm%5===0?' half':'');
+    tick.style.left=mm+'%';tick.setAttribute('aria-hidden','true');node.append(tick);
+    if(mm%10===0){
+      const number=document.createElement('b');number.className='ruler-number';number.style.left=mm+'%';
+      number.textContent=mm/10;number.setAttribute('aria-hidden','true');node.append(number);
+    }
+  }
+}
+function renderReferenceRuler(){
+  const visible=state.showRuler!==false;
+  $('referencePanel').classList.toggle('hidden',!visible);$('rulerBtn').setAttribute('aria-expanded',String(visible));
+  drawRuler($('physicalRuler'),realPpi());
+  $('rulerStatus').textContent=state.calibrated?'Calibrated':'Estimated';
+}
+function bezelInsets(d,screenW,screenH){
+  if(!state.frame)return {x:0,y:0};
+  // A physical 90-degree rotation moves the SE's wide top/bottom bezel
+  // to the left/right sides; it does not keep that bezel on the bottom.
+  const shortSide=Math.min(screenW,screenH);
+  if(d.cutout==='home'){
+    const narrow=shortSide*.044,wide=shortSide*.225;
+    return d.orientation==='landscape'?{x:wide,y:narrow}:{x:narrow,y:wide};
+  }
+  const k=d.family==='Monitor'?.022:d.family==='iPad'?.038:.044;
+  return {x:shortSide*k,y:shortSide*k};
+}
+function dimensions(d){return physicalDimensions(d,d.orientation)}
+function fullMetrics(d,scale){
+  const g=dimensions(d),pp=realPpi()*scale,sw=g.inchW*pp,sh=g.inchH*pp,ins=bezelInsets(d,sw,sh);
+  return {...g,sw,sh,outerW:sw+2*ins.x,outerH:sh+2*ins.y,ins,pp,innerScale:sw/g.logicalW};
+}
+function getFitScale(){
+  if(!state.devices.length)return 1;
+  const stage=$('stage');
+  const targetWidth=Math.max(260,stage.clientWidth-85),targetHeight=Math.max(200,stage.clientHeight-165);
+  const raw=state.devices.map(d=>fullMetrics(d,1));
+  const gap=28*(raw.length-1);
+  const totalW=raw.reduce((s,m)=>s+Math.max(132,m.outerW),0)+gap;
+  const maxH=Math.max(...raw.map(m=>m.outerH));
+  return clamp(Math.min(targetWidth/totalW,targetHeight/maxH,1),.09,1);
+}
+function format(n,digits=1){return Number(n).toFixed(digits)}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+let autosaveWarningShown=false;
+function save(){
+  $('currentWorkspaceLabel').textContent='Current workspace: '+state.workspaceName;
+  try{
+    localStorage.setItem('devicescale-lab-v1',JSON.stringify({workspaceName:state.workspaceName,savedWorkspaceId:state.savedWorkspaceId,devices:state.devices,monitorModelId:state.monitorModelId,monitorBrand:state.monitorBrand,monitorSize:state.monitorSize,monitorW:state.monitorW,monitorH:state.monitorH,monitorDiag:state.monitorDiag,monitorDpr:state.monitorDpr,cssPpi:state.cssPpi,calibrated:state.calibrated,safe:state.safe,frame:state.frame,dimensions:state.dimensions,duoSeam:state.duoSeam,mode:state.mode,imageFit:state.imageFit,rectangles:state.rectangles,rectSelected:state.rectSelected,rectBg:state.rectBg,showRuler:state.showRuler!==false,source:state.source==='rectangles'?'rectangles':'demo'}));
+    $('autosaveStatus').textContent='Latest rectangle workspace saved locally';$('autosaveStatus').classList.remove('workspace-error');autosaveWarningShown=false;
+    return true;
+  }catch(err){
+    $('autosaveStatus').textContent='Autosave unavailable — export a project file to keep your work.';$('autosaveStatus').classList.add('workspace-error');
+    if(!autosaveWarningShown){showToast('Browser storage is unavailable or full. Export a project file to keep your work.');autosaveWarningShown=true}
+    return false;
+  }
+}
+function saveBeforeLeaving(){
+  // A number input may still be focused when the tab closes, before its change event.
+  let monitorChanged=false;
+  for(const id of ['monitorW','monitorH','monitorDiag','monitorDpr']){
+    const input=$(id),value=Number(input.value);
+    if(input.value.trim()&&Number.isFinite(value)&&value>=Number(input.min)&&value<=Number(input.max)&&value!==state[id]){
+      state[id]=value;monitorChanged=true;
+    }
+  }
+  if(monitorChanged){
+    if(MONITOR_CATALOG.find(m=>m.id===state.monitorModelId)?.diag!==state.monitorDiag)state.monitorModelId='';
+    state.cssPpi=null;state.calibrated=false;render();
+  }
+  save();
+}
+function restore(){
+  try{
+    const json=localStorage.getItem('devicescale-lab-v1');if(!json)return;
+    const v=JSON.parse(json);if(!v||typeof v!=='object')return;
+    if(typeof v.workspaceName==='string'&&v.workspaceName.trim())state.workspaceName=v.workspaceName.trim().slice(0,64);
+    if(typeof v.savedWorkspaceId==='string'&&/^[a-zA-Z0-9_-]{1,64}$/.test(v.savedWorkspaceId))state.savedWorkspaceId=v.savedWorkspaceId;
+    for(const [k,min,max] of [['monitorW',640,16000],['monitorH',480,10000],['monitorDiag',8,120],['monitorDpr',.5,5],['cssPpi',1,5000]])
+      if(typeof v[k]==='number'&&Number.isFinite(v[k])&&v[k]>=min&&v[k]<=max)state[k]=v[k];
+    if(MONITOR_CATALOG.some(m=>m.id===v.monitorModelId&&m.diag===state.monitorDiag))state.monitorModelId=v.monitorModelId;
+    if(['all','Apple','AOC','Dell'].includes(v.monitorBrand))state.monitorBrand=v.monitorBrand;
+    if(v.monitorSize==='all'||MONITOR_CATALOG.some(m=>String(m.sizeClass)===v.monitorSize))state.monitorSize=v.monitorSize;
+    for(const k of ['calibrated','safe','frame','dimensions','duoSeam','showRuler'])if(typeof v[k]==='boolean')state[k]=v[k];
+    if(!state.cssPpi)state.calibrated=false;
+    if(v.source==='rectangles')state.source='rectangles';
+    if(['fit','physical'].includes(v.mode))state.mode=v.mode;
+    if(['cover','contain','fill'].includes(v.imageFit))state.imageFit=v.imageFit;
+    if(typeof v.rectBg==='string'&&/^#[0-9a-f]{6}$/i.test(v.rectBg))state.rectBg=v.rectBg;
+    if(Array.isArray(v.rectangles))state.rectangles=v.rectangles.slice(0,80).filter(r=>r&&typeof r==='object').map(r=>({
+      id:/^[a-zA-Z0-9_-]{1,64}$/.test(String(r.id))?String(r.id):uid(),
+      name:typeof r.name==='string'?r.name.slice(0,56):'Rectangle',
+      description:typeof r.description==='string'?r.description.slice(0,1000):'',
+      x:safeNum(r.x,0,-50000,50000),y:safeNum(r.y,0,-50000,50000),
+      w:safeNum(r.w,20,.1,50000),h:safeNum(r.h,20,.1,50000),
+      posUnit:r.posUnit==='px'?'px':'%',sizeUnit:r.sizeUnit==='px'?'px':'%',
+      fill:typeof r.fill==='string'&&/^#[0-9a-f]{6}$/i.test(r.fill)?r.fill:'#2768a3',
+      opacity:safeNum(r.opacity,100,0,100)
+    }));
+    if(typeof v.rectSelected==='string')state.rectSelected=v.rectSelected;
+    if(!state.rectangles.some(r=>r.id===state.rectSelected))state.rectSelected=state.rectangles[0]?.id||null;
+    if(Array.isArray(v.devices))state.devices=v.devices.slice(0,12).filter(d=>d&&d.name&&d.w>99&&d.h>99&&d.diag>1&&d.dpr>.4).map(d=>({...d,instance:uid(),orientation:d.orientation==='landscape'?'landscape':'portrait'}));
+  }catch(err){}
+}
+function showToast(msg){clearTimeout(toastTimer);const node=$('toast');node.textContent=msg;node.classList.remove('hidden');toastTimer=setTimeout(()=>node.classList.add('hidden'),4700)}
+function setSource(kind){
+  closeRectPopup(false);rectGesture=null;
+  state.source=kind;
+  document.querySelectorAll('[data-source]').forEach(b=>b.classList.toggle('active',b.dataset.source===kind));
+  for(const k of ['demo','rectangles','image','html','url'])$(k+'Panel').classList.toggle('hidden',k!==kind);
+  $('exportBtn').disabled=!(kind==='rectangles'||kind==='image'&&state.imageSrc);
+  $('exportBtn').title=kind==='rectangles'?'Export rectangle composition as PNG':kind==='image'?'Export screenshot comparison as PNG':'PNG export supports Rectangles and Image modes';
+  render();save();
+}
+function renderPresetInfo(){
+  const id=$('presetSelect').value,d=PRESETS.find(x=>x.id===id);
+  $('customFields').classList.toggle('hidden',id!=='custom');
+  if(id==='custom'){
+    const w=safeNum($('customW').value,1920,100,16000),h=safeNum($('customH').value,1080,100,16000),diag=safeNum($('customDiag').value,24,2,100),dpr=safeNum($('customDpr').value,1,.5,5);
+    $('presetInfo').innerHTML=`<strong>Custom screen</strong><br>${w} × ${h} physical px · ${format(diag)}” · DPR ${format(dpr,2)}<br>Layout viewport: ${Math.round(w/dpr)} × ${Math.round(h/dpr)} CSS px`;
+  }else if(d){
+    const logical=`${format(Math.min(d.w,d.h)/d.dpr,0)} × ${format(Math.max(d.w,d.h)/d.dpr,0)}`;
+    $('presetInfo').innerHTML=`<strong>${esc(d.name)}</strong><br>${Math.min(d.w,d.h)} × ${Math.max(d.w,d.h)} native px · ${format(d.diag,2)}”<br>Layout ${logical} CSS px · DPR ${d.dpr}`;
+  }
+}
+function filteredMonitorModels(brand='all',size='all'){
+  return MONITOR_CATALOG.filter(m=>(brand==='all'||m.brand===brand)&&(size==='all'||String(m.sizeClass)===size));
+}
+function withViewingMonitorModel(id,workspace=state){
+  if(!id)return {...workspace,monitorModelId:''};
+  const model=MONITOR_CATALOG.find(m=>m.id===id);if(!model)throw Error('Unknown monitor model.');
+  return {...workspace,monitorModelId:id,monitorDiag:model.diag,cssPpi:null,calibrated:false};
+}
+function renderMonitorCatalog(){
+  const brand=$('monitorBrand'),size=$('monitorSize'),models=$('monitorModel');
+  brand.replaceChildren(new Option('All brands','all'),...['Apple','AOC','Dell'].map(b=>new Option(b,b)));brand.value=state.monitorBrand;
+  const sizes=[...new Set(filteredMonitorModels(state.monitorBrand).map(m=>m.sizeClass))].sort((a,b)=>a-b);
+  if(state.monitorSize!=='all'&&!sizes.includes(Number(state.monitorSize)))state.monitorSize='all';
+  size.replaceChildren(new Option('All sizes','all'),...sizes.map(s=>new Option(s+'-inch',String(s))));size.value=state.monitorSize;
+  const matches=filteredMonitorModels(state.monitorBrand,state.monitorSize),selected=MONITOR_CATALOG.find(m=>m.id===state.monitorModelId);
+  models.replaceChildren(new Option('Custom / enter diagonal',''));
+  if(selected&&!matches.includes(selected)){
+    const group=document.createElement('optgroup');group.label='Current model (outside filters)';group.append(new Option(selected.name,selected.id));models.append(group);
+  }
+  const groups=new Map();
+  for(const model of matches){
+    const label=model.brand+' · '+model.kind+' · '+model.sizeClass+'-inch';
+    if(!groups.has(label)){const group=document.createElement('optgroup');group.label=label;groups.set(label,group);models.append(group)}
+    groups.get(label).append(new Option(model.name,model.id));
+  }
+  models.value=selected?selected.id:'';
+  const info=$('monitorModelInfo');info.replaceChildren();
+  if(selected){
+    info.append(selected.brand+' '+selected.name+' · '+selected.diag+'″ diagonal · Native '+selected.nativeW+' × '+selected.nativeH+' px (reference only). ');
+    const link=document.createElement('a');link.href=selected.source;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Manufacturer specifications';info.append(link);
+    if(selected.note)info.append(' '+selected.note);
+  }else info.append(matches.length+' models match. Select a model or enter a custom diagonal.');
+  info.append(' Catalog checked '+MONITOR_CATALOG_CHECKED+'.');
+}
+function renderMonitorFields(){
+  renderMonitorCatalog();
+  $('monitorW').value=state.monitorW;$('monitorH').value=state.monitorH;$('monitorDiag').value=state.monitorDiag;$('monitorDpr').value=state.monitorDpr;
+  const match=`${state.monitorW}x${state.monitorH}`;
+  $('monitorPreset').value=Array.from($('monitorPreset').options).some(o=>o.value===match)?match:'custom';
+  $('monitorInfo').innerHTML=`<strong>${state.calibrated?'Ruler-calibrated':'Estimated'}: ${format(realPpi(),1)} CSS px/in</strong><br>Monitor density: ${format(Math.hypot(state.monitorW,state.monitorH)/state.monitorDiag,1)} physical PPI · Browser DPR ${format(state.monitorDpr,2)}`;
+}
+
+// A rectangle is defined in logical CSS pixels or percentages of each viewport.
+// Every preview derives its geometry from this one shared model.
+const currentRect=()=>state.rectangles.find(r=>r.id===state.rectSelected);
+const DESCRIPTION_STYLE={padding:8,fontSize:14,lineHeight:18,fontFamily:'-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'};
+const descriptionWords=typeof Intl.Segmenter==='function'?new Intl.Segmenter(undefined,{granularity:'word'}):null;
+const descriptionGraphemes=typeof Intl.Segmenter==='function'?new Intl.Segmenter(undefined,{granularity:'grapheme'}):null;
+function layoutDescription(text,width,height,measure){
+  const {padding,lineHeight}=DESCRIPTION_STYLE,available=width-2*padding;
+  const maxLines=Math.max(0,Math.ceil((height-2*padding)/lineHeight)),lines=[];
+  if(!text||available<=0||!maxLines)return lines;
+  const append=line=>{if(lines.length<maxLines)lines.push({text:line,x:padding,y:padding+lines.length*lineHeight})};
+  for(const paragraph of text.replace(/\r\n?/g,'\n').split('\n')){
+    if(lines.length>=maxLines)break;
+    const words=descriptionWords?Array.from(descriptionWords.segment(paragraph),s=>s.segment):paragraph.match(/\s+|\S+/gu)||[];
+    let line='';
+    for(const word of words){
+      if(lines.length>=maxLines)break;
+      if(measure(line+word)<=available){line+=word;continue}
+      if(line){append(line.trimEnd());line=''}
+      if(lines.length>=maxLines)break;
+      const token=word.trimStart();
+      const graphemes=descriptionGraphemes?Array.from(descriptionGraphemes.segment(token),s=>s.segment):Array.from(token);
+      for(const character of graphemes){
+        if(line&&measure(line+character)>available){append(line);line=''}
+        if(lines.length>=maxLines)break;
+        line+=character;
+      }
+    }
+    if(lines.length<maxLines)append(line);
+  }
+  return lines;
+}
+function descriptionColor(fill){
+  const rgb=fill.slice(1).match(/../g).map(hex=>parseInt(hex,16)/255).map(n=>n<=.04045?n/12.92:((n+.055)/1.055)**2.4);
+  const luminance=.2126*rgb[0]+.7152*rgb[1]+.0722*rgb[2];
+  return (luminance+.05)/.05>=1.05/(luminance+.05)?'#000000':'#ffffff';
+}
+let descriptionMeasureContext;
+function descriptionLayout(r,width,height){
+  if(!descriptionMeasureContext)descriptionMeasureContext=document.createElement('canvas').getContext('2d');
+  const ctx=descriptionMeasureContext;
+  if(!ctx)return {lines:[],baseline:14};
+  ctx.font=DESCRIPTION_STYLE.fontSize+'px '+DESCRIPTION_STYLE.fontFamily;
+  const metrics=ctx.measureText('Mg'),ascent=metrics.fontBoundingBoxAscent??metrics.actualBoundingBoxAscent,descent=metrics.fontBoundingBoxDescent??metrics.actualBoundingBoxDescent;
+  return {lines:layoutDescription(r.description||'',width,height,text=>ctx.measureText(text).width),baseline:(DESCRIPTION_STYLE.lineHeight-ascent-descent)/2+ascent};
+}
+function renderDescription(node,r,geometry,scale){
+  const container=node.querySelector('.shape-description');
+  const key=JSON.stringify([r.description,geometry.w,geometry.h,scale,r.fill]);
+  if(container.dataset.layout===key)return;container.dataset.layout=key;container.replaceChildren();
+  const {lines}=descriptionLayout(r,geometry.w,geometry.h);
+  for(const line of lines){
+    const span=document.createElement('span');span.className='shape-description-line';span.textContent=line.text;
+    span.style.cssText=`left:${line.x*scale}px;top:${line.y*scale}px;font:${DESCRIPTION_STYLE.fontSize*scale}px ${DESCRIPTION_STYLE.fontFamily};line-height:${DESCRIPTION_STYLE.lineHeight*scale}px;color:${descriptionColor(r.fill)}`;
+    container.append(span);
+  }
+}
+function rectGeometry(r,lw,lh){
+  return {x:r.posUnit==='%'?r.x*lw/100:r.x,y:r.posUnit==='%'?r.y*lh/100:r.y,
+    w:r.sizeUnit==='%'?r.w*lw/100:r.w,h:r.sizeUnit==='%'?r.h*lh/100:r.h};
+}
+function styleRect(node,r,m){
+  const g=rectGeometry(r,m.logicalW,m.logicalH),f=m.innerScale;
+  node.style.left=(g.x*f)+'px';node.style.top=(g.y*f)+'px';
+  node.style.width=(g.w*f)+'px';node.style.height=(g.h*f)+'px';
+  node.style.backgroundColor=r.fill;node.style.opacity=(r.opacity/100);
+  renderDescription(node,r,g,f);
+  node.classList.toggle('selected',r.id===state.rectSelected);
+  node.title=(r.name||'Unnamed rectangle')+' — click to edit, drag to move';
+  node.setAttribute('aria-label',(r.name||'Unnamed rectangle')+' properties'+(r.description?': '+r.description:''));
+  node.setAttribute('aria-pressed',String(r.id===state.rectSelected));
+}
+function createRectLayer(m,d){
+  const layer=document.createElement('div');layer.className='shape-layer';
+  layer.dataset.deviceInstance=d.instance;layer.style.backgroundColor=state.rectBg;
+  for(const r of state.rectangles){
+    const el=document.createElement('div');el.className='shape-rect';el.dataset.rectId=r.id;
+    el.tabIndex=0;el.setAttribute('role','button');el.setAttribute('aria-haspopup','dialog');
+    const description=document.createElement('div');description.className='shape-description';description.setAttribute('aria-hidden','true');el.append(description);
+    const resize=document.createElement('span');resize.className='shape-resize';resize.title='Drag to resize';el.append(resize);
+    styleRect(el,r,m);layer.append(el);
+  }
+  return layer;
+}
+function updateRectVisuals(){
+  document.querySelectorAll('.shape-layer').forEach(layer=>{
+    const d=state.devices.find(d=>d.instance===layer.dataset.deviceInstance);if(!d)return;
+    const m=fullMetrics(d,cachedFit),background=state.rectBg;
+    layer.style.backgroundColor=background;
+    layer.querySelectorAll('.shape-rect').forEach(node=>{
+      const r=state.rectangles.find(r=>r.id===node.dataset.rectId);if(r)styleRect(node,r,m);
+    });
+  });
+}
+function renderRectList(){
+  const root=$('rectList');root.replaceChildren();
+  if(!state.rectangles.length){root.innerHTML='<p class="hint">No rectangles. Add a shape to begin.</p>';return}
+  state.rectangles.forEach((r,i)=>{
+    const btn=document.createElement('button');btn.className='rect-row'+(r.id===state.rectSelected?' active':'');
+    btn.type='button';btn.dataset.rectSelect=r.id;
+    btn.innerHTML=`<span class="swatch" style="background:${r.fill}"></span><span>${esc(r.name)}</span><small>Layer ${i+1}</small>`;
+    root.append(btn);
+  });
+}
+function renderRectEditor(){
+  const r=currentRect();$('rectEditor').classList.toggle('hidden',!r);if(!r){closeRectPopup(false);return}
+  const v={rectName:r.name,rectDescription:r.description||'',rectPosUnit:r.posUnit,rectSizeUnit:r.sizeUnit,rectX:r.x,rectY:r.y,rectW:r.w,rectH:r.h,rectFill:r.fill,rectOpacity:r.opacity};
+  for(const prefix of ['', 'popup']){
+    Object.entries(v).forEach(([id,val])=>{const input=$(editorId(prefix,id));if(input&&input!==document.activeElement)input.value=val});
+    const index=state.rectangles.indexOf(r);
+    $(editorId(prefix,'rectBackBtn')).disabled=index<=0;$(editorId(prefix,'rectForwardBtn')).disabled=index>=state.rectangles.length-1;
+    $(editorId(prefix,'duplicateRectBtn')).disabled=state.rectangles.length>=80;
+  }
+  if(rectPopupContext){
+    if(rectPopupContext.rectId!==r.id||!state.devices.some(d=>d.instance===rectPopupContext.deviceInstance)){closeRectPopup(false);return}
+    $('rectPopupTitle').textContent=r.name||'Unnamed rectangle';
+    const d=state.devices.find(d=>d.instance===rectPopupContext.deviceInstance),m=dimensions(d);
+    $('rectPopupContext').textContent=d.name+' · '+Math.round(m.logicalW)+' × '+Math.round(m.logicalH)+' CSS px. Edits apply to every device.';
+  }
+}
+function selectRectangle(id){if(rectPopupContext?.rectId!==id)closeRectPopup(false);state.rectSelected=id;renderRectList();renderRectEditor();updateRectVisuals();save()}
+function addRectangle(){
+  if(state.rectangles.length>=80){showToast('Maximum 80 rectangles per composition.');return}
+  const n=state.rectangles.length;const colors=['#5f9ecb','#72c7bf','#b6a3dd','#c5d4ed','#5e8eb8'];
+  const r={id:uid(),name:'Rectangle '+(n+1),description:'',x:10+(n%5)*5,y:15+(n%6)*6,w:46,h:18,posUnit:'%',sizeUnit:'%',fill:colors[n%colors.length],opacity:100};
+  state.rectangles.push(r);state.rectSelected=r.id;save();render();showToast('Rectangle added to all devices.');
+}
+function deleteRectangle(){
+  const i=state.rectangles.findIndex(r=>r.id===state.rectSelected);if(i<0)return;
+  const context=rectPopupContext;closeRectPopup(false);
+  state.rectangles.splice(i,1);state.rectSelected=state.rectangles[Math.min(i,state.rectangles.length-1)]?.id||null;
+  save();render();
+  if(context)(findRectElement(context.deviceInstance,state.rectSelected)||$('addRectBtn')).focus({preventScroll:true});
+}
+function duplicateRectangle(){
+  const r=currentRect();if(!r||state.rectangles.length>=80)return;
+  const c={...r,id:uid(),name:(r.name+' copy').slice(0,56),x:Math.min(50000,r.x+3),y:Math.min(50000,r.y+3)};
+  if(rectPopupContext)rectPopupContext.rectId=c.id;
+  const i=state.rectangles.indexOf(r);state.rectangles.splice(i+1,0,c);state.rectSelected=c.id;save();render();
+}
+function stackRectangle(delta){
+  const i=state.rectangles.findIndex(r=>r.id===state.rectSelected),j=i+delta;
+  if(i<0||j<0||j>=state.rectangles.length)return;
+  [state.rectangles[i],state.rectangles[j]]=[state.rectangles[j],state.rectangles[i]];save();render();
+}
+function referenceLogicalSize(deviceInstance){
+  const d=state.devices.find(d=>d.instance===deviceInstance)||state.devices[0]||{...PRESETS[0],orientation:'portrait'};return dimensions(d);
+}
+function convertRectUnit(key,next,deviceInstance){
+  const r=currentRect();if(!r)return;
+  const prev=r[key];if(prev===next)return;
+  const ref=referenceLogicalSize(deviceInstance);const props=key==='posUnit'?['x','y']:['w','h'];
+  const values=props.map((k,i)=>{
+    const basis=i===0?ref.logicalW:ref.logicalH;
+    return next==='%'?r[k]/basis*100:r[k]*basis/100;
+  });
+  if(values.some(n=>!Number.isFinite(n)||n<(key==='posUnit'?-50000:.1)||n>50000)){
+    showToast('That unit conversion exceeds the supported geometry range.');return;
+  }
+  props.forEach((k,i)=>{r[k]=values[i]});
+  r[key]=next;save();renderRectEditor();updateRectVisuals();
+}
+const editorId=(prefix,id)=>prefix?prefix+id[0].toUpperCase()+id.slice(1):id;
+let rectPopupContext=null;
+function findRectElement(deviceInstance,rectId){
+  const layer=Array.from(document.querySelectorAll('.shape-layer')).find(el=>el.dataset.deviceInstance===deviceInstance);
+  return layer&&Array.from(layer.querySelectorAll('.shape-rect')).find(el=>el.dataset.rectId===rectId);
+}
+function closeRectPopup(restoreFocus=true){
+  const context=rectPopupContext;rectPopupContext=null;$('rectPopup').classList.add('hidden');
+  if(restoreFocus&&context)(findRectElement(context.deviceInstance,context.rectId)||$('addRectBtn')).focus({preventScroll:true});
+}
+function positionRectPopup(){
+  if(!rectPopupContext)return;
+  const anchor=findRectElement(rectPopupContext.deviceInstance,rectPopupContext.rectId);
+  if(!anchor){closeRectPopup(false);return}
+  const popup=$('rectPopup'),box=anchor.getBoundingClientRect(),width=popup.offsetWidth,height=popup.offsetHeight;
+  const viewport=window.visualViewport,left=viewport?.offsetLeft||0,top=viewport?.offsetTop||0;
+  const right=left+(viewport?.width||window.innerWidth),bottom=top+(viewport?.height||window.innerHeight);
+  popup.style.maxHeight=Math.max(80,bottom-top-24)+'px';
+  popup.style.left=clamp(box.right+12+width<=right-12?box.right+12:box.left-width-12,left+12,Math.max(left+12,right-width-12))+'px';
+  popup.style.top=clamp(box.top,top+12,Math.max(top+12,bottom-height-12))+'px';
+}
+function openRectPopup(deviceInstance,rectId){
+  selectRectangle(rectId);rectPopupContext={deviceInstance,rectId};
+  $('rectPopup').classList.remove('hidden');renderRectEditor();positionRectPopup();
+  $('popupRectName').focus({preventScroll:true});
+}
+function updateRectangleProperty(key,input){
+  const r=currentRect();if(!r)return;
+  if(key==='name')r.name=input.value.slice(0,56);
+  else if(key==='description')r.description=input.value.slice(0,1000);
+  else if(key==='fill')r.fill=input.value;
+  else{
+    const n=Number(input.value),min=key==='w'||key==='h'?.1:key==='opacity'?0:-50000,max=key==='opacity'?100:50000;
+    const valid=input.value.trim()!==''&&Number.isFinite(n)&&n>=min&&n<=max;
+    input.setCustomValidity(valid?'':`Enter a value between ${min} and ${max}.`);
+    if(!valid)return;r[key]=n;
+  }
+  save();renderRectList();renderRectEditor();updateRectVisuals();
+}
+function initRectPopup(){
+  const editor=$('rectEditor').cloneNode(true);editor.id='popupEditor';editor.classList.remove('hidden');editor.querySelector('h3').remove();
+  editor.querySelectorAll('[id]').forEach(el=>{el.id=editorId('popup',el.id)});
+  editor.querySelectorAll('label[for]').forEach(el=>{el.htmlFor=editorId('popup',el.htmlFor)});
+  $('rectPopup').append(editor);
+}
+function bindRectEditor(prefix){
+  $(editorId(prefix,'duplicateRectBtn')).addEventListener('click',duplicateRectangle);
+  $(editorId(prefix,'deleteRectBtn')).addEventListener('click',deleteRectangle);
+  $(editorId(prefix,'rectBackBtn')).addEventListener('click',()=>stackRectangle(-1));
+  $(editorId(prefix,'rectForwardBtn')).addEventListener('click',()=>stackRectangle(1));
+  for(const [id,key] of [['rectPosUnit','posUnit'],['rectSizeUnit','sizeUnit']])
+    $(editorId(prefix,id)).addEventListener('change',e=>{
+      convertRectUnit(key,e.target.value,prefix?rectPopupContext?.deviceInstance:undefined);e.target.value=currentRect()[key];
+    });
+  for(const [id,key] of [['rectName','name'],['rectDescription','description'],['rectX','x'],['rectY','y'],['rectW','w'],['rectH','h'],['rectFill','fill'],['rectOpacity','opacity']]){
+    const input=$(editorId(prefix,id));input.addEventListener('input',()=>updateRectangleProperty(key,input));
+    input.addEventListener('blur',()=>{input.setCustomValidity('');renderRectEditor()});
+  }
+}
+let rectGesture=null;
+function startRectGesture(event){
+  if(state.source!=='rectangles'||event.button!==0||!event.isPrimary)return;
+  const el=event.target.closest('.shape-rect');if(!el)return;
+  const r=state.rectangles.find(r=>r.id===el.dataset.rectId);if(!r)return;
+  const layer=el.closest('.shape-layer'),d=state.devices.find(d=>d.instance===layer?.dataset.deviceInstance);
+  if(!d)return;
+  closeRectPopup(false);
+  if(state.rectSelected!==r.id)selectRectangle(r.id);
+  const m=fullMetrics(d,cachedFit);
+  rectGesture={pointerId:event.pointerId,startX:event.clientX,startY:event.clientY,
+    before:{x:r.x,y:r.y,w:r.w,h:r.h},rectId:r.id,deviceInstance:d.instance,element:el,moved:false,
+    action:event.target.closest('.shape-resize')?'resize':'move',m};
+  el.focus({preventScroll:true});el.setPointerCapture(event.pointerId);
+  event.preventDefault();
+}
+function updateRectGesture(event){
+  const g=rectGesture;if(!g||event.pointerId!==g.pointerId)return;
+  const r=state.rectangles.find(r=>r.id===g.rectId);if(!r)return;
+  if(!g.moved&&Math.hypot(event.clientX-g.startX,event.clientY-g.startY)<5)return;
+  g.moved=true;
+  const dx=(event.clientX-g.startX)/g.m.innerScale;
+  const dy=(event.clientY-g.startY)/g.m.innerScale;
+  const unit=r[g.action==='resize'?'sizeUnit':'posUnit'];
+  const fx=unit==='%'?100/g.m.logicalW:1,fy=unit==='%'?100/g.m.logicalH:1;
+  const round=n=>Math.round(n*100)/100;
+  if(g.action==='move'){r.x=round(clamp(g.before.x+dx*fx,-50000,50000));r.y=round(clamp(g.before.y+dy*fy,-50000,50000))}
+  else {r.w=round(clamp(g.before.w+dx*fx,unit==='%'?.5:3,50000));r.h=round(clamp(g.before.h+dy*fy,unit==='%'?.5:3,50000))}
+  updateRectVisuals();
+  const keys=g.action==='move'?['rectX','rectY']:['rectW','rectH'];
+  $(keys[0]).value=g.action==='move'?r.x:r.w;$(keys[1]).value=g.action==='move'?r.y:r.h;
+  event.preventDefault();
+}
+function endRectGesture(event){
+  const g=rectGesture;if(!g||event.pointerId!==g.pointerId)return;rectGesture=null;
+  if(g.element.hasPointerCapture(event.pointerId))g.element.releasePointerCapture(event.pointerId);
+  if(event.type==='pointercancel'){
+    const r=state.rectangles.find(r=>r.id===g.rectId);if(r)Object.assign(r,g.before);updateRectVisuals();renderRectEditor();return;
+  }
+  save();
+  if(!g.moved&&g.action==='move')openRectPopup(g.deviceInstance,g.rectId);
+}
+function moveDevice(from,delta){
+  const to=from+delta;if(to<0||to>=state.devices.length)return;
+  const [item]=state.devices.splice(from,1);state.devices.splice(to,0,item);save();render();
+}
+let draggingDevice=null;
+function bindSorting(){
+  const root=$('deviceList');
+  root.addEventListener('dragstart',e=>{
+    const handle=e.target.closest('.drag-handle');if(!handle)return;
+    draggingDevice=handle.dataset.instance;
+    e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',draggingDevice);
+  });
+  root.addEventListener('dragover',e=>{
+    const card=e.target.closest('.device-card');if(!card||!draggingDevice)return;
+    e.preventDefault();e.dataTransfer.dropEffect='move';
+    root.querySelectorAll('.drag-over').forEach(c=>c.classList.remove('drag-over'));
+    card.classList.add('drag-over');
+  });
+  root.addEventListener('drop',e=>{
+    const card=e.target.closest('.device-card');if(!card||!draggingDevice)return;
+    e.preventDefault();const from=state.devices.findIndex(d=>d.instance===draggingDevice);
+    const target=state.devices.findIndex(d=>d.instance===card.dataset.deviceInstance);
+    if(from<0||target<0){draggingDevice=null;return}
+    const after=e.clientX>card.getBoundingClientRect().left+card.getBoundingClientRect().width/2;
+    let dest=target+(after?1:0);const [item]=state.devices.splice(from,1);
+    if(from<dest)dest--;state.devices.splice(dest,0,item);
+    draggingDevice=null;save();render();
+  });
+  root.addEventListener('dragend',()=>{draggingDevice=null;root.querySelectorAll('.drag-over').forEach(c=>c.classList.remove('drag-over'))});
+}
+
+function renderCards(){
+  const root=$('deviceList');root.replaceChildren();
+  if(!state.devices.length)root.innerHTML='<div class="empty"><h3>No devices selected</h3><p>Choose an Apple device or a custom display, then press Add to comparison.</p></div>';
+  const scale=state.mode==='fit'?getFitScale():1;cachedFit=scale;
+  state.devices.forEach(d=>{
+    const m=fullMetrics(d,scale),card=document.createElement('article');card.className='device-card';card.dataset.deviceInstance=d.instance;
+    card.style.width=`${Math.max(132,m.outerW)}px`;
+    const title=document.createElement('div');title.className='device-title';
+    title.innerHTML=`<div><div class="name" title="${esc(d.name)}">${esc(d.name)}</div><div class="group">${esc(d.family||'Custom')} - ${format(d.diag,2)} in display</div></div><div class="card-buttons"><span class="drag-handle" draggable="true" data-instance="${d.instance}" title="Drag to reorder devices" role="img" aria-label="Drag handle">&#9776;</span><button class="iconbtn" data-act="left" data-instance="${d.instance}" title="Move left" aria-label="Move ${esc(d.name)} left">&#8592;</button><button class="iconbtn" data-act="right" data-instance="${d.instance}" title="Move right" aria-label="Move ${esc(d.name)} right">&#8594;</button><button class="iconbtn" data-act="rotate" data-instance="${d.instance}" title="Rotate device" aria-label="Rotate ${esc(d.name)}">&#8635;</button><button class="iconbtn" data-act="remove" data-instance="${d.instance}" title="Remove device" aria-label="Remove ${esc(d.name)}">&#215;</button></div>`;
+    const shell=document.createElement('div');shell.className='device-shell';
+    shell.style.cssText=`width:${m.outerW}px;height:${m.outerH}px;border-radius:${state.frame?Math.max(5,m.sw*.075):2}px;background:${state.frame?'':'transparent'};border-color:${state.frame?'':'transparent'};box-shadow:${state.frame?'':'none'};`;
+    const screen=document.createElement('div');screen.className='device-screen';
+    screen.style.cssText=`width:${m.sw}px;height:${m.sh}px;border-radius:${d.cutout==='home'?Math.max(0,m.sw*.006):Math.max(0,m.sw*(d.family==='iPhone'?.09:d.family==='iPad'?.028:.004))}px;`;
+    if(state.source==='rectangles'){screen.append(createRectLayer(m,d));}
+    else if(state.source==='image'){
+      if(state.imageSrc){const img=document.createElement('img');img.src=state.imageSrc;img.style.objectFit=state.imageFit;img.alt='Uploaded mockup displayed at the selected device proportions';screen.append(img)}
+      else {const placeholder=document.createElement('div');placeholder.style.cssText='position:absolute;inset:0;display:grid;place-items:center;color:#7186a0;background:linear-gradient(160deg,#f5f8fd,#dbe7f5);font-size:12px;text-align:center;padding:14px';placeholder.textContent='Upload a mockup image in the left panel';screen.append(placeholder)}
+    } else {
+      const iframe=document.createElement('iframe');iframe.title='Responsive preview for '+d.name;
+      iframe.setAttribute('sandbox','allow-scripts allow-forms');iframe.setAttribute('loading','eager');
+      iframe.style.width=m.logicalW+'px';iframe.style.height=m.logicalH+'px';iframe.style.transform=`scale(${m.innerScale})`;
+      if(state.source==='demo')iframe.srcdoc=DEMO_HTML;
+      else if(state.source==='html')iframe.srcdoc=state.html||'<p style="font:16px system-ui;padding:24px">Load or paste an HTML document on the left.</p>';
+      else iframe.src=state.url||'about:blank';
+      screen.append(iframe);
+    }
+    if(state.safe&&d.family!=='Monitor'){
+      let insets={top:d.safeTop||0,bottom:d.safeBottom||0,left:0,right:0};
+      if(d.orientation==='landscape'&&d.family==='iPhone')insets={top:0,bottom:Math.min(d.safeBottom||0,21),left:d.cutout==='home'?0:(d.safeTop||0),right:d.cutout==='home'?0:(d.safeTop||0)};
+      for(const k of ['top','bottom','left','right'])if(insets[k]){
+        const el=document.createElement('div');el.className='safe-'+k;
+        el.style[k==='top'||k==='bottom'?'height':'width']=(insets[k]*m.innerScale)+'px';screen.append(el);
+      }
+    }
+    if(state.frame&&['notch','island'].includes(d.cutout)&&d.orientation==='portrait'){
+      const cut=document.createElement('div');cut.className='cutout';
+      cut.style.width=m.sw*(d.cutout==='notch'?.45:.33)+'px';
+      cut.style.height=Math.max(2,m.innerScale*(d.cutout==='notch'?25:27))+'px';
+      cut.style.borderRadius=d.cutout==='notch'?'0 0 12px 12px':'0 0 15px 15px';screen.append(cut);
+    }
+    if(d.duoView==='front'&&state.frame){
+      const cam=document.createElement('div');cam.className='duo-camera';
+      const dia=Math.max(3,m.sw*.053);cam.style.width=dia+'px';cam.style.height=dia+'px';
+      if(d.orientation==='portrait'){cam.style.right=m.sw*.08+'px';cam.style.top=m.sh*.045+'px'}
+      else{cam.style.right=m.sw*.05+'px';cam.style.bottom=m.sh*.08+'px'}
+      screen.append(cam);
+    }
+    if(d.duoView==='open'&&state.duoSeam){
+      const seam=document.createElement('div');seam.className='duo-seam';
+      if(d.orientation==='landscape'){seam.style.cssText=`top:0;bottom:0;left:50%;width:${Math.max(2,m.sw*.012)}px;transform:translateX(-50%);`}
+      else{seam.style.cssText=`left:0;right:0;top:50%;height:${Math.max(2,m.sh*.012)}px;transform:translateY(-50%);background:linear-gradient(0deg,#0a102323,#dee9ff15 35%,#050d2149 50%,#c1d2ff18 68%,#141d3147);`}
+      screen.append(seam);
+    }
+    shell.append(screen);
+    if(state.frame&&d.cutout==='home'){
+      const home=document.createElement('div');home.className='home-button';
+      const landscape=d.orientation==='landscape';
+      const inset=landscape?m.ins.x:m.ins.y;
+      const size=Math.max(3,inset*.45);
+      home.style.width=size+'px';home.style.height=size+'px';
+      if(landscape){
+        home.style.right=inset/2+'px';home.style.top='50%';
+        home.style.transform='translate(50%,-50%)';
+      }else{
+        home.style.left='50%';home.style.bottom=inset/2+'px';
+        home.style.transform='translate(-50%,50%)';
+      }
+      shell.append(home);
+    }
+    const meta=document.createElement('div');meta.className='device-meta';
+    meta.innerHTML=`<div class="metahead"><span>Logical viewport</span><b class="mono">${Math.round(m.logicalW)} × ${Math.round(m.logicalH)}</b></div><div>Native: <b class="mono">${m.nativeW} × ${m.nativeH} px</b> &nbsp;·&nbsp; <b>${format(d.dpr,2)}×</b></div>${state.dimensions?`<div>Screen: <b>${format(m.inchW*2.54,1)} × ${format(m.inchH*2.54,1)} cm</b></div><div>Density: <b>${format(Math.hypot(d.w,d.h)/d.diag,0)} PPI</b></div>`:''}`;
+    if(d.duoView==='open')meta.insertAdjacentHTML('beforeend','<div>Opened inner OLED: <b>continuous screen / two visual panels</b></div>');
+    card.append(title,shell,meta);root.append(card);
+  });
+  $('deviceCount').textContent=state.devices.length+' display'+(state.devices.length===1?'':'s');
+  $('scaleInfo').textContent=state.mode==='fit'?`${Math.round(scale*100)}% shared scale`:(state.calibrated?'Calibrated 1:1':'Estimated 1:1');
+  $('stageNote').textContent=state.mode==='fit'?'All displays keep their physical size proportions. Fit view is not life-size.':state.calibrated?'Ruler-calibrated 1:1 screen size. Browser zoom and moving to another monitor can invalidate it.':'Estimated 1:1 only. Calibrate with a real ruler for near-life-size display.';
+  $('fitMode').classList.toggle('active',state.mode==='fit');$('physicalMode').classList.toggle('active',state.mode==='physical');
+  $('exportBtn').disabled=!(state.source==='rectangles'||state.source==='image'&&state.imageSrc);
+}
+function render(){rectGesture=null;renderCards();renderMonitorFields();renderRectList();renderRectEditor();renderReferenceRuler();positionRectPopup()}
+function queueRender(){if(renderQueued)return;renderQueued=true;requestAnimationFrame(()=>{renderQueued=false;render()})}
+function addDevice(){
+  let d;
+  if($('presetSelect').value==='custom'){
+    const name=$('customName').value.trim().slice(0,120)||'Custom display';
+    d={id:'user',name,family:'Custom',w:safeNum($('customW').value,1920,100,16000),h:safeNum($('customH').value,1080,100,16000),diag:safeNum($('customDiag').value,24,2,100),dpr:safeNum($('customDpr').value,1,.5,5),cutout:'none'};
+  } else d=PRESETS.find(x=>x.id===$('presetSelect').value);
+  if(!d)return;if(state.devices.length>=12){showToast('Limit: 12 devices at one time. Remove one to add another.');return}
+  state.devices.push({...d,instance:uid(),orientation:d.defaultOrientation||(d.family==='Monitor'||d.family==='Custom'&&d.w>d.h?'landscape':'portrait')});
+  save();render();showToast(d.name+' added to comparison.');
+}
+function updateMonitor(){
+  state.monitorW=safeNum($('monitorW').value,1920,640,16000);state.monitorH=safeNum($('monitorH').value,1080,480,10000);
+  state.monitorDiag=safeNum($('monitorDiag').value,24,8,120);state.monitorDpr=safeNum($('monitorDpr').value,1,.5,5);
+  if(MONITOR_CATALOG.find(m=>m.id===state.monitorModelId)?.diag!==state.monitorDiag)state.monitorModelId='';
+  state.cssPpi=null;state.calibrated=false;save();render();
+}
+function openCalibration(){
+  closeRectPopup(false);$('manualPpi').value=realPpi();$('measuredMm').value='100';refreshRuler();
+  if(typeof $('calibrationDialog').showModal==='function')$('calibrationDialog').showModal();else $('calibrationDialog').setAttribute('open','');
+}
+function refreshRuler(){
+  const ppi=Number($('manualPpi').value),measured=Number($('measuredMm').value);
+  if(Number.isFinite(ppi)&&ppi>=1&&ppi<=5000)drawRuler($('calibrationRuler'),ppi);
+  try{
+    const corrected=calibratedDensity(ppi,measured);
+    $('calibrationInfo').textContent='100 mm target · Current: '+format(ppi,2)+' CSS px/in · After applying: '+format(corrected,2)+' CSS px/in';
+    $('saveCalibration').disabled=false;
+  }catch(err){$('calibrationInfo').textContent=err.message;$('saveCalibration').disabled=true}
+}
+function closeCalibration(){if($('calibrationDialog').open&&typeof $('calibrationDialog').close==='function')$('calibrationDialog').close();else $('calibrationDialog').removeAttribute('open')}
+function applyCalibration(){
+  try{state.cssPpi=calibratedDensity(Number($('manualPpi').value),Number($('measuredMm').value))}
+  catch(err){refreshRuler();return}
+  state.calibrated=true;closeCalibration();save();render();showToast('Calibration saved. Use Physical 1:1 to check device size. Recheck after changing monitor or browser zoom.');
+}
+function setMode(mode){state.mode=mode;save();render();if(mode==='physical'&&!state.calibrated)showToast('Physical 1:1 is currently an estimate. Use Calibrate real-world size for accuracy.');}
+function rotateAll(orientation){for(const d of state.devices)d.orientation=orientation;save();render()}
+function populateSelect(){
+  const groupTitles=['iPhone','iPad','Monitor','Custom'],select=$('presetSelect');
+  groupTitles.forEach(g=>{const optgroup=document.createElement('optgroup');optgroup.label=g==='Monitor'?'16:9 monitor presets':g;
+    PRESETS.filter(d=>d.family===g).forEach(d=>{const option=document.createElement('option');option.value=d.id;option.textContent=d.name;optgroup.append(option)});
+    select.append(optgroup);
+  });
+  select.value='air11m3';renderPresetInfo();
+}
+function applyMonitorPreset(){
+  const val=$('monitorPreset').value;if(val==='custom')return;
+  const [w,h]=val.split('x').map(Number);
+  $('monitorW').value=w;$('monitorH').value=h;
+  updateMonitor();
+}
+function roundedPath(ctx,x,y,w,h,r){
+  r=Math.min(Math.max(0,r),w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();
+}
+function drawScreenshot(ctx,img,x,y,w,h,fit){
+  if(fit==='fill'){ctx.drawImage(img,x,y,w,h);return}
+  const iw=img.naturalWidth,ih=img.naturalHeight;if(!iw||!ih)return;
+  const factor=fit==='contain'?Math.min(w/iw,h/ih):Math.max(w/iw,h/ih),dw=iw*factor,dh=ih*factor;
+  ctx.drawImage(img,x+(w-dw)/2,y+(h-dh)/2,dw,dh);
+}
+async function exportPNG(){
+  if(!(state.source==='rectangles'||state.source==='image'&&state.imageSrc)){showToast('PNG export supports Rectangles or an uploaded Image.');return}
+  let img=null;
+  if(state.source==='image'){
+    img=new Image();img.src=state.imageSrc;
+    try{await img.decode()}catch(err){showToast('Could not read this image for PNG export.');return}
+  }
+  const scale=state.mode==='fit'?getFitScale():1;
+  const metrics=state.devices.map(d=>fullMetrics(d,scale));
+  if(!metrics.length){showToast('Add at least one device.');return}
+  const gap=27,pad=37,top=105,footer=105;
+  const colWidths=metrics.map(m=>Math.max(132,m.outerW));
+  const totalW=pad*2+colWidths.reduce((s,n)=>s+n,0)+gap*(metrics.length-1);
+  const maxH=Math.max(...metrics.map(m=>m.outerH));const totalH=top+maxH+footer;
+  const exportFactor=Math.min(2,8190/totalW,8190/totalH);
+  const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.ceil(totalW*exportFactor));canvas.height=Math.max(1,Math.ceil(totalH*exportFactor));
+  const ctx=canvas.getContext('2d');if(!ctx){showToast('Canvas export is not available in this browser.');return}ctx.scale(exportFactor,exportFactor);
+  ctx.fillStyle='#0a1320';ctx.fillRect(0,0,totalW,totalH);
+  ctx.fillStyle='#edf6ff';ctx.font='bold 24px -apple-system,system-ui,sans-serif';ctx.fillText('DeviceScale Lab · Mockup comparison',pad,48);
+  ctx.fillStyle='#9bb4cd';ctx.font='12px -apple-system,system-ui,sans-serif';ctx.fillText(state.mode==='physical'?'Relative physical 1:1 dimensions · '+(state.calibrated?'calibrated on source monitor':'estimated on source monitor'):'Relative physical screen proportions · fit to canvas',pad,70);
+  let x=pad;
+  state.devices.forEach((d,i)=>{
+    const m=metrics[i],colW=colWidths[i],sx=x+(colW-m.outerW)/2,sy=top+(maxH-m.outerH)/2;
+    ctx.fillStyle='#1d3148';roundedPath(ctx,sx,sy,m.outerW,m.outerH,Math.max(3,m.sw*.07));ctx.fill();
+    ctx.strokeStyle='#58728a';ctx.lineWidth=1.2;ctx.stroke();
+    const screenX=sx+m.ins.x,screenY=sy+m.ins.y;
+    ctx.save();roundedPath(ctx,screenX,screenY,m.sw,m.sh,Math.max(0,m.sw*(d.family==='iPhone'?.09:.026)));ctx.clip();ctx.fillStyle='#eef4fa';ctx.fillRect(screenX,screenY,m.sw,m.sh);
+    if(state.source==='rectangles'){
+      ctx.fillStyle=state.rectBg;ctx.fillRect(screenX,screenY,m.sw,m.sh);
+      state.rectangles.forEach(r=>{
+        const g=rectGeometry(r,m.logicalW,m.logicalH);
+        ctx.globalAlpha=r.opacity/100;ctx.fillStyle=r.fill;
+        ctx.fillRect(screenX+g.x*m.innerScale,screenY+g.y*m.innerScale,g.w*m.innerScale,g.h*m.innerScale);
+        const layout=descriptionLayout(r,g.w,g.h);
+        ctx.save();ctx.translate(screenX+g.x*m.innerScale,screenY+g.y*m.innerScale);ctx.scale(m.innerScale,m.innerScale);
+        ctx.beginPath();ctx.rect(0,0,g.w,g.h);ctx.clip();
+        ctx.font=DESCRIPTION_STYLE.fontSize+'px '+DESCRIPTION_STYLE.fontFamily;ctx.textBaseline='alphabetic';ctx.textAlign='left';ctx.fillStyle=descriptionColor(r.fill);
+        for(const line of layout.lines)ctx.fillText(line.text,line.x,line.y+layout.baseline);
+        ctx.restore();
+      });ctx.globalAlpha=1;
+    } else drawScreenshot(ctx,img,screenX,screenY,m.sw,m.sh,state.imageFit);
+    ctx.restore();
+    if(d.duoView==='open'&&state.duoSeam){
+      ctx.save();roundedPath(ctx,screenX,screenY,m.sw,m.sh,Math.max(2,m.sw*.03));ctx.clip();
+      if(d.orientation==='landscape'){
+        const sx=screenX+m.sw/2,bw=Math.max(2,m.sw*.012),grad=ctx.createLinearGradient(sx-bw/2,screenY,sx+bw/2,screenY);
+        grad.addColorStop(0,'#ffffff18');grad.addColorStop(.5,'#07152768');grad.addColorStop(1,'#d5e9ff22');
+        ctx.fillStyle=grad;ctx.fillRect(sx-bw/2,screenY,bw,m.sh);
+      }else{
+        const syMid=screenY+m.sh/2,bh=Math.max(2,m.sh*.012);
+        const grad=ctx.createLinearGradient(0,syMid-bh/2,0,syMid+bh/2);
+        grad.addColorStop(0,'#ffffff18');grad.addColorStop(.5,'#07152768');grad.addColorStop(1,'#d5e9ff22');
+        ctx.fillStyle=grad;ctx.fillRect(screenX,syMid-bh/2,m.sw,bh);
+      }ctx.restore();
+    }
+    if(d.duoView==='front'&&state.frame){
+      const dia=Math.max(3,m.sw*.053),cx=screenX+m.sw-(d.orientation==='portrait'?m.sw*.08:m.sw*.05)-dia/2;
+      const cy=d.orientation==='portrait'?screenY+m.sh*.045+dia/2:screenY+m.sh-m.sh*.08-dia/2;
+      ctx.fillStyle='#0a1320';ctx.beginPath();ctx.arc(cx,cy,dia/2,0,Math.PI*2);ctx.fill();
+    }
+    if(state.frame&&['notch','island'].includes(d.cutout)&&d.orientation==='portrait'){
+      const cw=m.sw*(d.cutout==='notch'?.45:.33),ch=Math.max(2,m.innerScale*25);ctx.fillStyle='#09101a';roundedPath(ctx,screenX+(m.sw-cw)/2,screenY-10,cw,ch+10,Math.max(2,ch*.4));ctx.fill();
+    }
+    if(state.frame&&d.cutout==='home'){
+      const landscape=d.orientation==='landscape';
+      const inset=landscape?m.ins.x:m.ins.y;
+      const s=Math.max(3,inset*.45);
+      const homeX=landscape?sx+m.outerW-m.ins.x/2:sx+m.outerW/2;
+      const homeY=landscape?sy+m.outerH/2:sy+m.outerH-m.ins.y/2;
+      ctx.strokeStyle='#8094ad';ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(homeX,homeY,s/2,0,Math.PI*2);ctx.stroke();
+    }
+    ctx.textAlign='center';ctx.fillStyle='#edf5ff';ctx.font='bold 13px -apple-system,system-ui,sans-serif';ctx.fillText(d.name,x+colW/2,top+maxH+31,colW-4);
+    ctx.fillStyle='#9db3cc';ctx.font='11px -apple-system,system-ui,sans-serif';
+    ctx.fillText(`${Math.round(m.logicalW)} × ${Math.round(m.logicalH)} CSS px · ${m.nativeW} × ${m.nativeH} native`,x+colW/2,top+maxH+49,colW-4);
+    ctx.fillText(`${format(m.inchW*2.54,1)} × ${format(m.inchH*2.54,1)} cm screen`,x+colW/2,top+maxH+66,colW-4);ctx.textAlign='start';
+    x+=colW+gap;
+  });
+  ctx.fillStyle='#738fa8';ctx.font='10px -apple-system,system-ui,sans-serif';ctx.fillText('PNG image is a visual comparison, not a universally life-size print. Calibrate in the live tool for physical 1:1 display.',pad,totalH-15);
+  canvas.toBlob(blob=>{
+    if(!blob){showToast('PNG export failed.');return}
+    const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='devicescale-comparison.png';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);showToast('Comparison PNG generated.');
+  },'image/png');
+}
+// .dslab v2 adds workspace names and descriptions; v1 imports migrate in memory.
+const PROJECT_FORMAT='devicescale-lab';
+const PROJECT_VERSION=2;
+function validateProject(value){
+  const record=(v,label)=>{if(!v||typeof v!=='object'||Array.isArray(v))throw Error(label+' must be an object.');return v};
+  const number=(v,min,max,label)=>{if(typeof v!=='number'||!Number.isFinite(v)||v<min||v>max)throw Error(label+` must be a number between ${min} and ${max}.`);return v};
+  const string=(v,max,label,empty=false)=>{if(typeof v!=='string'||v.length>max||(!empty&&!v.trim()))throw Error(label+' is missing or too long.');return v};
+  const choice=(v,allowed,label)=>{if(!allowed.includes(v))throw Error(label+' has an unsupported value.');return v};
+  const color=(v,label)=>{if(typeof v!=='string'||!/^#[0-9a-f]{6}$/i.test(v))throw Error(label+' must be a six-digit HEX color.');return v};
+  const identifier=(v,label)=>{if(typeof v!=='string'||!(/^[a-zA-Z0-9_-]{1,64}$/).test(v))throw Error(label+' is invalid.');return v};
+  record(value,'Project');
+  if(value.format!==PROJECT_FORMAT)throw Error('This is not a DeviceScale Lab project.');
+  if(![1,PROJECT_VERSION].includes(value.version))throw Error('Unsupported project version. Open this file with a compatible version of DeviceScale Lab.');
+  if(!Array.isArray(value.devices)||value.devices.length>12)throw Error('A project supports up to 12 devices.');
+  if(!Array.isArray(value.rectangles)||value.rectangles.length>80)throw Error('A project supports up to 80 rectangles.');
+  const devices=value.devices.map((entry,i)=>{
+    const d=record(entry,'Device '+(i+1));
+    const result={id:identifier(d.id,'Device ID'),name:string(d.name,120,'Device name'),
+      family:choice(d.family,['iPhone','iPad','Monitor','Custom'],'Device category'),
+      w:number(d.w,100,16000,'Native width'),h:number(d.h,100,16000,'Native height'),
+      diag:number(d.diag,2,100,'Display diagonal'),dpr:number(d.dpr,.5,5,'Display scale'),
+      cutout:choice(d.cutout,['none','home','notch','island','duo-front','duo-open'],'Display cutout'),
+      orientation:choice(d.orientation,['portrait','landscape'],'Device orientation')};
+    for(const key of ['safeTop','safeBottom'])if(d[key]!==undefined)result[key]=number(d[key],0,1000,key);
+    if(d.duoView!==undefined)result.duoView=choice(d.duoView,['front','open'],'Foldable view');
+    if(d.defaultOrientation!==undefined)result.defaultOrientation=choice(d.defaultOrientation,['portrait','landscape'],'Default orientation');
+    return result;
+  });
+  const ids=new Set();
+  const rectangles=value.rectangles.map((entry,i)=>{
+    const r=record(entry,'Rectangle '+(i+1)),id=identifier(r.id,'Rectangle ID');
+    if(ids.has(id))throw Error('Rectangle IDs must be unique.');ids.add(id);
+    return {id,name:string(r.name,56,'Rectangle name',true),
+      description:value.version===1&&r.description===undefined?'':string(r.description,1000,'Rectangle description',true),
+      x:number(r.x,-50000,50000,'Rectangle X'),y:number(r.y,-50000,50000,'Rectangle Y'),
+      w:number(r.w,.1,50000,'Rectangle width'),h:number(r.h,.1,50000,'Rectangle height'),
+      posUnit:choice(r.posUnit,['%','px'],'Position unit'),sizeUnit:choice(r.sizeUnit,['%','px'],'Size unit'),
+      fill:color(r.fill,'Rectangle fill'),opacity:number(r.opacity,0,100,'Rectangle opacity')};
+  });
+  const v=record(value.view,'Display settings'),view={mode:choice(v.mode,['fit','physical'],'Display mode')};
+  for(const key of ['safe','frame','dimensions','duoSeam']){
+    if(typeof v[key]!=='boolean')throw Error('Display setting '+key+' must be true or false.');view[key]=v[key];
+  }
+  const workspaceName=value.version===1?'Imported workspace':string(value.workspaceName,64,'Workspace name').trim();
+  const appVersion=value.version===1?APP_VERSION:string(value.appVersion,64,'Application version');
+  return {format:PROJECT_FORMAT,version:PROJECT_VERSION,appVersion,workspaceName,devices,rectangles,rectBg:color(value.rectBg,'Canvas background'),view};
+}
+function createProject(workspace=state){
+  return validateProject({format:PROJECT_FORMAT,version:PROJECT_VERSION,appVersion:APP_VERSION,workspaceName:workspace.workspaceName||'Untitled workspace',devices:workspace.devices,
+    rectangles:workspace.rectangles,rectBg:workspace.rectBg,
+    view:{mode:workspace.mode,safe:workspace.safe,frame:workspace.frame,dimensions:workspace.dimensions,duoSeam:workspace.duoSeam}});
+}
+function projectWorkspace(project,workspace=state){
+  const p=validateProject(project);
+  return {...workspace,...p.view,workspaceName:p.workspaceName,savedWorkspaceId:null,devices:p.devices.map(d=>({...d,instance:uid()})),rectangles:p.rectangles,
+    rectBg:p.rectBg,rectSelected:p.rectangles[0]?.id||null,source:'rectangles',imageSrc:null,imageObject:null,html:'',url:''};
+}
+function downloadFile(blob,filename){
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);
+}
+function exportProject(){
+  try{
+    downloadProject(createProject());
+    showToast('Rectangle project exported. Share the .dslab file and open it in DeviceScale Lab. Images, HTML, and monitor calibration are not included.');
+  }catch(err){showToast('Could not export project: '+err.message)}
+}
+function downloadProject(project){
+  const p={...validateProject(project),appVersion:APP_VERSION};
+  const filename=p.workspaceName.replace(/[<>:"/\\|?*\u0000-\u001f]/g,'-').replace(/[. ]+$/g,'')||'devicescale-project';
+  downloadFile(new Blob([JSON.stringify(p,null,2)+'\n'],{type:'application/json'}),filename+'.dslab');
+}
+let pendingProject=null;
+async function stageProjectFile(file){
+  pendingProject=null;
+  try{
+    if(file.size>1_000_000)throw Error('Choose a project smaller than 1 MB.');
+    let parsed;try{parsed=JSON.parse(await file.text())}catch(err){throw Error('The file does not contain valid project JSON.')}
+    const project=validateProject(parsed);
+    closeRectPopup(false);pendingProject=project;
+    $('importSummary').textContent=file.name+' · '+project.devices.length+' devices · '+project.rectangles.length+' rectangles';
+    $('importDialog').showModal();
+  }catch(err){showToast('Could not open project: '+err.message)}
+}
+function cancelProjectImport(){pendingProject=null;$('importDialog').close()}
+function confirmProjectImport(){
+  if(!pendingProject)return;
+  const project=pendingProject;cancelProjectImport();replaceWorkingProject(project);
+  showToast('Project opened. Use Workspaces → Save new to keep a named copy. Your monitor calibration is unchanged.');
+}
+function replaceWorkingProject(project,savedWorkspaceId=null){
+  const next=projectWorkspace(project),oldImage=state.imageSrc;
+  closeRectPopup(false);rectGesture=null;state=next;state.savedWorkspaceId=savedWorkspaceId;
+  if(oldImage)URL.revokeObjectURL(oldImage);
+  for(const id of ['imageFile','htmlFile','htmlText','urlText'])$(id).value='';
+  syncWorkspaceControls();setSource('rectangles');
+}
+function syncWorkspaceControls(){
+  for(const [id,key] of [['safeToggle','safe'],['frameToggle','frame'],['dimensionToggle','dimensions'],['duoSeamToggle','duoSeam']])$(id).checked=state[key];
+  $('imageFit').value=state.imageFit;$('rectBg').value=state.rectBg;
+}
+const WORKSPACE_STORAGE_KEY='devicescale-lab-workspaces-v1';
+let workspaceLibrary={version:1,entries:[]};
+let workspaceLibraryAvailable=true;
+function workspaceNameKey(name){return name.trim().toLowerCase()}
+function validateWorkspaceLibrary(value){
+  if(!value||value.version!==1||!Array.isArray(value.entries))throw Error('The saved workspace collection could not be read. Existing saved data has been left untouched.');
+  const ids=new Set(),names=new Set();
+  const entries=value.entries.map(entry=>{
+    if(!entry||typeof entry.id!=='string'||!/^[a-zA-Z0-9_-]{1,64}$/.test(entry.id)||ids.has(entry.id))throw Error('The saved workspace collection contains an invalid or duplicate ID.');
+    const project=validateProject(entry.project),name=project.workspaceName,key=workspaceNameKey(name);
+    if(names.has(key))throw Error('The saved workspace collection contains duplicate names.');ids.add(entry.id);names.add(key);
+    return {id:entry.id,project};
+  });
+  return {version:1,entries};
+}
+function readWorkspaceLibrary(storage=localStorage){
+  const raw=storage.getItem(WORKSPACE_STORAGE_KEY);
+  if(raw===null)return {version:1,entries:[]};
+  return validateWorkspaceLibrary(JSON.parse(raw));
+}
+function saveNamedWorkspace(name,project,id=null,storage=localStorage){
+  if(typeof name!=='string'||!name.trim()||name.trim().length>64)throw Error('Enter a workspace name of 1–64 characters.');
+  name=name.trim();
+  const library=readWorkspaceLibrary(storage);
+  if(id&&!library.entries.some(entry=>entry.id===id))throw Error('That saved workspace no longer exists. Close and reopen Workspaces.');
+  if(library.entries.some(entry=>entry.id!==id&&workspaceNameKey(entry.project.workspaceName)===workspaceNameKey(name)))throw Error('That workspace name is already used. Choose another name or select it and Update.');
+  const entry={id:id||uid(),project:validateProject({...project,workspaceName:name,appVersion:APP_VERSION})};
+  if(id)library.entries=library.entries.map(item=>item.id===id?entry:item);else library.entries.push(entry);
+  storage.setItem(WORKSPACE_STORAGE_KEY,JSON.stringify(library));
+  return {library,entry};
+}
+function deleteNamedWorkspace(id,storage=localStorage){
+  const library=readWorkspaceLibrary(storage);
+  if(!library.entries.some(entry=>entry.id===id))throw Error('That saved workspace no longer exists. Close and reopen Workspaces.');
+  library.entries=library.entries.filter(entry=>entry.id!==id);
+  storage.setItem(WORKSPACE_STORAGE_KEY,JSON.stringify(library));return library;
+}
+function workspaceLibraryMessage(message,error=false){
+  $('workspaceLibraryStatus').textContent=message;$('workspaceLibraryStatus').classList.toggle('workspace-error',error);
+}
+function selectedSavedWorkspace(){return workspaceLibrary.entries.find(entry=>entry.id===$('savedWorkspaceSelect').value)}
+function renderWorkspaceSelection(){
+  const selected=selectedSavedWorkspace();
+  $('workspaceName').value=selected?selected.project.workspaceName:state.workspaceName;
+  $('savedWorkspaceSummary').textContent=selected?selected.project.devices.length+' devices · '+selected.project.rectangles.length+' rectangles':'Save your current layout as a named copy.';
+  for(const id of ['updateWorkspaceBtn','loadWorkspaceBtn','deleteWorkspaceBtn','exportWorkspaceBtn'])$(id).disabled=!selected||!workspaceLibraryAvailable;
+  $('saveWorkspaceBtn').disabled=!workspaceLibraryAvailable;
+}
+function renderWorkspaceLibrary(selectedId=state.savedWorkspaceId){
+  const select=$('savedWorkspaceSelect');select.replaceChildren(new Option('Select a saved workspace',''));
+  workspaceLibrary.entries.forEach(entry=>select.append(new Option(entry.project.workspaceName,entry.id)));
+  select.value=workspaceLibrary.entries.some(entry=>entry.id===selectedId)?selectedId:'';renderWorkspaceSelection();
+}
+function openWorkspaces(){
+  closeRectPopup(false);
+  try{
+    workspaceLibrary=readWorkspaceLibrary();workspaceLibraryAvailable=true;
+    workspaceLibraryMessage('Saved on this browser. Export .dslab files for backup or sharing.');
+  }catch(err){
+    workspaceLibrary={version:1,entries:[]};workspaceLibraryAvailable=false;
+    workspaceLibraryMessage('Saved workspaces are unavailable: '+err.message+' Use Export project to keep the current layout.',true);
+  }
+  renderWorkspaceLibrary();$('workspacesDialog').showModal();
+}
+function saveWorkspaceFromDialog(update=false){
+  const selected=selectedSavedWorkspace(),id=update?selected?.id:null;
+  if(update&&!selected)return;
+  if(update&&!confirm('Replace “'+selected.project.workspaceName+'” with the current layout and name?'))return;
+  try{
+    const result=saveNamedWorkspace($('workspaceName').value,createProject(),id);
+    workspaceLibrary=result.library;state.workspaceName=result.entry.project.workspaceName;state.savedWorkspaceId=result.entry.id;
+    save();renderWorkspaceLibrary(result.entry.id);workspaceLibraryMessage('Saved “'+state.workspaceName+'”. Further edits are autosaved separately; use Update to replace this copy.');
+  }catch(err){workspaceLibraryMessage('Could not save workspace: '+err.message+' You can still use Export project.',true)}
+}
+function loadWorkspaceFromDialog(){
+  const selected=selectedSavedWorkspace();if(!selected)return;
+  if(!confirm('Load “'+selected.project.workspaceName+'” and replace the current layout? Export the current project first if you want to keep a copy.'))return;
+  try{
+    const entry=readWorkspaceLibrary().entries.find(item=>item.id===selected.id);
+    if(!entry)throw Error('That saved workspace no longer exists.');
+    replaceWorkingProject(entry.project,entry.id);$('workspacesDialog').close();showToast('Workspace loaded. Your monitor calibration is unchanged.');
+  }catch(err){workspaceLibraryMessage('Could not load workspace: '+err.message,true)}
+}
+function deleteWorkspaceFromDialog(){
+  const selected=selectedSavedWorkspace();if(!selected)return;
+  if(!confirm('Delete saved workspace “'+selected.project.workspaceName+'”? The current working layout will stay open.'))return;
+  try{
+    workspaceLibrary=deleteNamedWorkspace(selected.id);
+    if(state.savedWorkspaceId===selected.id){state.savedWorkspaceId=null;save()}
+    renderWorkspaceLibrary();workspaceLibraryMessage('Saved copy deleted. The current layout is unchanged.');
+  }catch(err){workspaceLibraryMessage('Could not delete workspace: '+err.message,true)}
+}
+function exportWorkspaceFromDialog(){
+  const selected=selectedSavedWorkspace();if(!selected)return;
+  try{downloadProject(selected.project);workspaceLibraryMessage('Exported saved copy “'+selected.project.workspaceName+'”.')}
+  catch(err){workspaceLibraryMessage('Could not export workspace: '+err.message,true)}
+}
+function bindEvents(){
+  // Save incrementally; lifecycle events also capture an in-progress gesture before leaving.
+  window.addEventListener('pagehide',saveBeforeLeaving);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')saveBeforeLeaving()});
+  $('workspacesBtn').addEventListener('click',openWorkspaces);
+  $('closeWorkspacesBtn').addEventListener('click',()=>$('workspacesDialog').close());
+  $('savedWorkspaceSelect').addEventListener('change',()=>{renderWorkspaceSelection();workspaceLibraryMessage('Load to open this saved copy, or Update to replace it with your current layout.')});
+  $('saveWorkspaceBtn').addEventListener('click',()=>saveWorkspaceFromDialog());
+  $('updateWorkspaceBtn').addEventListener('click',()=>saveWorkspaceFromDialog(true));
+  $('loadWorkspaceBtn').addEventListener('click',loadWorkspaceFromDialog);
+  $('deleteWorkspaceBtn').addEventListener('click',deleteWorkspaceFromDialog);
+  $('exportWorkspaceBtn').addEventListener('click',exportWorkspaceFromDialog);
+  $('openProjectBtn').addEventListener('click',()=>{$('projectFile').value='';$('projectFile').click()});
+  $('exportProjectBtn').addEventListener('click',exportProject);
+  $('projectFile').addEventListener('change',e=>{const file=e.target.files?.[0];if(file)stageProjectFile(file)});
+  $('cancelImportBtn').addEventListener('click',cancelProjectImport);
+  $('confirmImportBtn').addEventListener('click',confirmProjectImport);
+  $('importDialog').addEventListener('close',()=>{pendingProject=null});
+  $('closeRectPopup').addEventListener('click',()=>closeRectPopup());
+  document.addEventListener('pointerdown',e=>{if(rectPopupContext&&!$('rectPopup').contains(e.target))closeRectPopup(false)});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&rectPopupContext){e.preventDefault();closeRectPopup()}});
+  $('deviceList').addEventListener('keydown',e=>{
+    const el=e.target.closest('.shape-rect');
+    if(el&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openRectPopup(el.closest('.shape-layer').dataset.deviceInstance,el.dataset.rectId)}
+  });
+  $('stage').addEventListener('scroll',positionRectPopup,{passive:true});
+  window.addEventListener('scroll',positionRectPopup,{passive:true});
+  window.addEventListener('resize',positionRectPopup);
+  window.visualViewport?.addEventListener('resize',positionRectPopup);
+  window.visualViewport?.addEventListener('scroll',positionRectPopup);
+  bindRectEditor('');bindRectEditor('popup');
+  $('presetSelect').addEventListener('change',renderPresetInfo);
+  for(const id of ['customW','customH','customDiag','customDpr'])$(id).addEventListener('input',renderPresetInfo);
+  $('addBtn').addEventListener('click',addDevice);
+  $('addDuoPairBtn').addEventListener('click',()=>{
+    if(state.devices.length>10){showToast('Remove devices to leave room for two Duo views (limit: 12).');return}
+    for(const id of ['duoFront','duoOpen']){
+      const d=PRESETS.find(p=>p.id===id);state.devices.push({...d,instance:uid(),orientation:d.defaultOrientation});
+    }
+    save();render();showToast('iPhone Duo front and open views added.');
+  });
+  bindSorting();
+  $('deviceList').addEventListener('pointerdown',startRectGesture);
+  window.addEventListener('pointermove',updateRectGesture);
+  window.addEventListener('pointerup',endRectGesture);
+  window.addEventListener('pointercancel',endRectGesture);
+  $('rectList').addEventListener('click',e=>{
+    const btn=e.target.closest('[data-rect-select]');if(btn)selectRectangle(btn.dataset.rectSelect);
+  });
+  $('rectBg').addEventListener('input',e=>{state.rectBg=e.target.value;save();updateRectVisuals()});
+  $('addRectBtn').addEventListener('click',addRectangle);
+  $('clearRectBtn').addEventListener('click',()=>{
+    if(!state.rectangles.length)return;
+    if(!confirm('Remove all rectangles from the shared mockup?'))return;
+    state.rectangles=[];state.rectSelected=null;save();render();
+  });
+  $('deviceList').addEventListener('click',e=>{
+    const btn=e.target.closest('[data-act]');if(!btn)return;
+    const i=state.devices.findIndex(d=>d.instance===btn.dataset.instance);if(i<0)return;
+    if(btn.dataset.act==='left'||btn.dataset.act==='right'){moveDevice(i,btn.dataset.act==='left'?-1:1);return}
+    if(btn.dataset.act==='remove')state.devices.splice(i,1);
+    if(btn.dataset.act==='rotate')state.devices[i].orientation=state.devices[i].orientation==='portrait'?'landscape':'portrait';
+    save();render();
+  });
+  document.querySelectorAll('[data-source]').forEach(btn=>btn.addEventListener('click',()=>setSource(btn.dataset.source)));
+  $('imageFit').addEventListener('change',()=>{state.imageFit=$('imageFit').value;save();render()});
+  $('imageFile').addEventListener('change',e=>{
+    const file=e.target.files&&e.target.files[0];if(!file)return;
+    if(!/^image\//.test(file.type)){showToast('Choose a PNG, JPEG, WEBP, or SVG image.');return}
+    if(state.imageSrc)URL.revokeObjectURL(state.imageSrc);
+    state.imageSrc=URL.createObjectURL(file);$('exportBtn').disabled=false;setSource('image');showToast('Mockup loaded: '+file.name);
+  });
+  $('htmlFile').addEventListener('change',async e=>{
+    const file=e.target.files&&e.target.files[0];if(!file)return;
+    if(file.size>3_000_000){showToast('For this offline prototype, use HTML files smaller than 3 MB.');return}
+    try{state.html=await file.text();$('htmlText').value=state.html;setSource('html');showToast('HTML loaded: '+file.name)}catch(err){showToast('Could not read HTML file.')}
+  });
+  $('applyHtmlBtn').addEventListener('click',()=>{state.html=$('htmlText').value;setSource('html');showToast('HTML applied to all simulated viewports.')});
+  $('applyUrlBtn').addEventListener('click',()=>{
+    const u=$('urlText').value.trim();try{const parsed=new URL(u);if(!['https:','http:'].includes(parsed.protocol))throw Error('Unsupported protocol');state.url=parsed.href;setSource('url');showToast('URL loaded into sandboxed frames. The website may block embedding.')}catch(err){showToast('Enter a valid http:// or https:// website URL.')}
+  });
+  $('monitorPreset').addEventListener('change',applyMonitorPreset);
+  $('monitorBrand').addEventListener('change',()=>{state.monitorBrand=$('monitorBrand').value;renderMonitorCatalog();save()});
+  $('monitorSize').addEventListener('change',()=>{state.monitorSize=$('monitorSize').value;renderMonitorCatalog();save()});
+  $('monitorModel').addEventListener('change',()=>{state=withViewingMonitorModel($('monitorModel').value);save();render()});
+  for(const id of ['monitorW','monitorH','monitorDiag','monitorDpr'])$(id).addEventListener('change',updateMonitor);
+  $('calibrateBtn').addEventListener('click',openCalibration);
+  $('referenceCalibrateBtn').addEventListener('click',openCalibration);
+  $('rulerBtn').addEventListener('click',()=>{state.showRuler=state.showRuler===false;save();render()});
+  $('manualPpi').addEventListener('input',refreshRuler);$('measuredMm').addEventListener('input',refreshRuler);
+  $('closeCalibration').addEventListener('click',closeCalibration);
+  $('resetCalibration').addEventListener('click',()=>{$('manualPpi').value=format(estimatePpi(),2);$('measuredMm').value=100;refreshRuler()});
+  $('saveCalibration').addEventListener('click',applyCalibration);
+  $('fitMode').addEventListener('click',()=>setMode('fit'));
+  $('physicalMode').addEventListener('click',()=>setMode('physical'));
+  $('portraitAll').addEventListener('click',()=>rotateAll('portrait'));
+  $('landscapeAll').addEventListener('click',()=>rotateAll('landscape'));
+  for(const [id,key] of [['safeToggle','safe'],['frameToggle','frame'],['dimensionToggle','dimensions'],['duoSeamToggle','duoSeam']])$(id).addEventListener('change',e=>{state[key]=e.target.checked;save();render()});
+  $('resetBtn').addEventListener('click',()=>{
+    if(!confirm('Reset all display profiles and calibration settings?'))return;
+    if(state.imageSrc)URL.revokeObjectURL(state.imageSrc);
+    state=defaults();save();$('imageFile').value='';$('htmlFile').value='';$('htmlText').value='';$('urlText').value='';
+    syncWorkspaceControls();setSource('demo');showToast('Workspace reset.');
+  });
+  $('exportBtn').addEventListener('click',exportPNG);
+  let timer;window.addEventListener('resize',()=>{clearTimeout(timer);timer=setTimeout(queueRender,130)});
+  if('ResizeObserver' in window){const observer=new ResizeObserver(()=>{clearTimeout(timer);timer=setTimeout(queueRender,130)});observer.observe($('stage'))}
+}
+function init(){
+  document.title='DeviceScale Lab '+APP_VERSION+' - Screen Size & Responsive Mockup Studio';$('appVersion').textContent=APP_VERSION;
+  restore();initRectPopup();populateSelect();bindEvents();syncWorkspaceControls();setSource(state.source);
+}
+init();
+</script>
+</body>
+</html>

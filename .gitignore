@@ -1,0 +1,36 @@
+# macOS metadata
+.DS_Store
+._*
+.AppleDouble/
+.LSOverride
+
+# Editor temporary files and local history
+*.swp
+*.swo
+*~
+.history/
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/shelf/
+
+# Local environment and credentials; keep example configuration versioned
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+/.aws/
+
+# Local logs and caches
+*.log
+.cache/
+
+# Generated dependencies and output if JavaScript tooling is added
+node_modules/
+/dist/
+/build/
+/coverage/
+
+# Downloaded app comparisons (including numbered browser download copies)
+# Keep other images, mockups, and reference assets versioned.
+/devicescale-comparison*.png
